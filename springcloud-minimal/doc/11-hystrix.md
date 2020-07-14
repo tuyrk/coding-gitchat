@@ -1,14 +1,5 @@
 # Hystrix 容错监控机制
 
-title: 11-Hystrix 容错监控机制
-date: 2020-07-10 15:09:26
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 上节课我们说到 Feign 提供了容错功能，该功能是结合 Hystrix 实现的，本节课我们就来学习 Hystrix 的相关知识。
 
 ### 什么是微服务容错机制？

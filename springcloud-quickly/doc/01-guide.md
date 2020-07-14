@@ -1,12 +1,5 @@
 # 导读：什么是 Spring Cloud 及应用现状
 
-title: 01-导读：什么是 Spring Cloud 及应用现状
-date: 2020-06-28 14:59:17
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 ### Spring Cloud 是什么？
 
 在学习本课程之前，读者有必要先了解一下 Spring Cloud。

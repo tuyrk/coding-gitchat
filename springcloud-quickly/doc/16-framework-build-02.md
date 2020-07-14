@@ -1,12 +1,5 @@
 # 第15课：Spring Cloud 实例详解——基础框架搭建（二）
 
-title: 16-第15课：Spring Cloud 实例详解——基础框架搭建（二）
-date: 2020-07-06 12:03:11
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 接着上一篇，我们继续来搭建基础框架，本文我们将搭建客户端基础模块，集成熔断器，集成持久层框架 MyBatis。
 
 在上一篇我们已经构建好了配置中心，因此，此后搭建的所有工程都是将配置文件放到 Git 上（点击[这里](https://github.com/springcloudlynn/springcloudinactivity)获取本课程配置文件的 Git 仓库地址），通过配置中心将配置文件从 Git 仓库上拉取下来。

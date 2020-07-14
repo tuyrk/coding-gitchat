@@ -1,12 +1,5 @@
 # 第05课：服务注册与发现
 
-title: 06-第05课：服务注册与发现
-date: 2020-06-30 16:45:07
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 我们知道，微服务是一个架构思想，而 Spring Cloud 集成了用以实现微服务架构的方方面面。从本文开始，我将带领大家逐个击破 Spring Cloud 的各个模块。
 
 本课我们先来学习服务的注册与发现，Spring Cloud Netflix 的 Eureka 组件是服务于发现模块。

@@ -1,14 +1,5 @@
 # 跨服务接口调用神器 RestTemplate
 
-title: 06-跨服务接口调用神器 RestTemplate
-date: 2020-07-09 17:05:48
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 在实现服务消费者之前，我们先来学习 RestTemplate 的使用，通过 RestTemplate 可以实现不同微服务之间的调用。
 
 ### 什么是 REST

@@ -1,12 +1,5 @@
 # 第16课：Spring Cloud 实例详解——基础框架搭建（三）
 
-title: 17-第16课：Spring Cloud 实例详解——基础框架搭建（三）
-date: 2020-07-06 16:00:24
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 本文我们将集成 Redis，实现 API 鉴权机制。
 
 ### Redis 的集成

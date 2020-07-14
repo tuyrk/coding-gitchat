@@ -1,14 +1,5 @@
 # 搭建消息中间件 RabbitMQ 环境
 
-title: 13-搭建消息中间件 RabbitMQ 环境
-date: 2020-07-13 09:06:11
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 在学习远程配置中心之前，我们先来学习如何安装 RabbitMQ，因为远程配置中心的动态更新需要结合 RabbitMQ 来使用。
 
 ### 什么是 RabbitMQ

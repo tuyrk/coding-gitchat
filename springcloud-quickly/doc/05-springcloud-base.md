@@ -1,12 +1,5 @@
 # 第04课：初识 Spring Cloud
 
-title: 05-第04课：初识 Spring Cloud
-date: 2020-06-30 16:07:44
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 Spring Cloud 基于 Spring Boot，因此在前几篇，我们系统地学习了 Spring Boot 的基础知识，为深入研究 Spring Cloud 打下扎实的基础。
 
 从本章开始，我们将正式进入探索 Spring Cloud 秘密的旅程中。学习完本课程后，读者将从中学习到如何搭建一个完整的分布式架构，从而向架构师方向靠近。

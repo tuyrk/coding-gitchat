@@ -1,12 +1,5 @@
 # 第14课：Spring Cloud 实例详解——基础框架搭建（一）
 
-title: 15-第14课：Spring Cloud 实例详解——基础框架搭建（一）
-date: 2020-07-06 10:51:11
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 通过前面基础组件的学习，我们已经可以利用这些组件搭建一个比较完整的微服务架构，为了巩固我们前面学习的知识，从本课开始，将以一个实际的案例带领大家构建一个完整的微服务架构（本课代码已放在 [GitHub](https://github.com/lynnlovemin/SpringCloudInActivity) 上）。
 
 ### 需求分析

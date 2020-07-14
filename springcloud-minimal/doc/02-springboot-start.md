@@ -1,14 +1,5 @@
 # Spring Boot 启动原理
 
-title: 02-Spring Boot 启动原理
-date: 2020-07-07 18:31:23
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 ### Spring Boot 自动配置原理
 
  Spring Boot 的核心功能是**自动配置**，意思就是 Spring Boot 框架可以**自动读取各种配置文件，并将项目所需要的组件全部加载到 IoC 容器**中，包括**开发者自定义组件**（如 Controller、Service、Repository）以及**框架自带组件**。

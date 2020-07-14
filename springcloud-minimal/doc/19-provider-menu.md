@@ -1,14 +1,5 @@
 # 服务提供者 menu
 
-title: 19-服务提供者 menu
-date: 2020-07-14 10:11:46
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 本节课我们来实现服务提供者 menu。menu 为系统提供菜品相关服务，包括添加菜品、查询菜品、修改菜品、删除菜品，具体实现如下所示。
 
 1. 在父工程下创建建名为 menu 的 Module，pom.xml 添加相关依赖

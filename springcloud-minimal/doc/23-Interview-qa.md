@@ -1,14 +1,5 @@
 # Spring Cloud 面试题汇总
 
-title: 23-Spring Cloud 面试题汇总
-date: 2020-07-14 14:37:34
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 至此，本专栏为大家详细讲解 Spring 全家桶最热门的模块 Spring Cloud 的使用，包括服务网关、Ribbon、Feign、Hystrix、Spring Cloud Config 等，涵盖了实际开发中常用的技能点，理论结合实践的方式不仅仅让读者掌握基本概念，同时具备使用 Spring Cloud 搭建微服务架构的能力。
 
 1. #### 什么是 Spring Cloud？

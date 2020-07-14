@@ -1,14 +1,5 @@
 # 注册中心和配置中心
 
-title: 17-注册中心和配置中心
-date: 2020-07-13 15:38:31
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 上节课我们搭建了 Spring Cloud 实战项目的基本环境，本节课我们来实现注册中心和配置中心。
 
 ### 注册中心

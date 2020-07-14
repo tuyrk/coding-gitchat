@@ -1,14 +1,5 @@
 # 服务提供者 account
 
-title: 18-服务提供者 account
-date: 2020-07-13 16:29:51
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 本节课我们来实现服务提供者 account，account 为系统提供所有的账户相关业务，包括用户和管理员登录、退出，具体实现如下所示。
 
 1. 在父工程下创建建名为 account 的 Module，pom.xml 添加相关依赖

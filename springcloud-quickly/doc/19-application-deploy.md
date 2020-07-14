@@ -1,12 +1,5 @@
 # 第18课：Spring Cloud 实例详解——系统发布
 
-title: 19-第18课：Spring Cloud 实例详解——系统发布
-date: 2020-07-07 10:43:57
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 接口开发完成并且测试通过后，就可以进行发布，系统发布可以有很多方式，本文将目前主要的发布方式一一列举出来，供大家参考。
 
 ### Java 命令行启动

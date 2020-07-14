@@ -1,12 +1,5 @@
 # 第02课：Spring Boot 进阶
 
-title: 03-第02课：Spring Boot 进阶
-date: 2020-06-28 15:46:11
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 上一篇带领大家初步了解了如何使用 Spring Boot 搭建框架，通过 Spring Boot 和传统的 SpringMVC 架构的对比，我们清晰地发现 Spring Boot 的好处，它使我们的代码更加简单，结构更加清晰。
 
 从这一篇开始，我将带领大家更加深入的认识 Spring Boot，将 Spring Boot 涉及到东西进行拆解，从而了解 Spring Boot 的方方面面。学完本文后，读者可以基于 Spring Boot 搭建更加复杂的系统框架。

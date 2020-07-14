@@ -1,12 +1,5 @@
 # 第07课：服务消费者
 
-title: 08-第07课：服务消费者
-date: 2020-07-01 14:07:09
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 前面我们提到，对外提供接口通过 gateway 服务网关实现。一个大型的系统由多个微服务模块组成，各模块之间不可避免需要进行通信，一般我们可以通过内部接口调用的形式，服务 A 提供一个接口，服务 B 通过 HTTP 请求调用服务 A 的接口，为了简化开发，Spring Cloud 提供了一个基础组件方便不同服务之间的 HTTP 调用，那就是 OpenFeign。
 
 ### 什么是 OpenFeign

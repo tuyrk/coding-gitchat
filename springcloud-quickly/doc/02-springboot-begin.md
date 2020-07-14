@@ -1,12 +1,5 @@
 # 第01课：Spring Boot 入门
 
-title: 02-第01课：Spring Boot 入门
-date: 2020-06-28 15:03:04
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 ### 什么是 Spring Boot
 
 Spring Boot 是由 Pivotal 团队提供的基于 Spring 的全新框架，其设计目的是为了简化 Spring 应用的搭建和开发过程。该框架遵循“**约定大于配置**”原则，采用特定的方式进行配置，从而使开发者**无需定义大量的 XML 配置**。通过这种方式，Spring Boot 致力于在蓬勃发展的快速应用开发领域成为领导者。

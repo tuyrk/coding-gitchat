@@ -1,14 +1,5 @@
 # 服务消费者 clientfeign
 
-title: 22-服务消费者 clientfeign
-date: 2020-07-14 12:04:36
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 前面的课程我们已经实现了注册中心、配置中心以及各种服务提供者，本节课我们来实现服务消费者 clientfeign，完成客户端的相关业务，分别调用服务提供者 account、menu、order、user 的相关服务，并通过 Feign 实现负载均衡。
 
 1. 在父工程下创建名为 clientfeign 的 Module ，pom.xml 添加相关依赖

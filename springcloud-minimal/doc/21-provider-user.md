@@ -1,14 +1,5 @@
 # 服务提供者 user
 
-title: 21-服务提供者 user
-date: 2020-07-14 11:43:06
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 本节课我们来实现服务提供者 user，user 为系统提供用户相关服务，包括添加用户、查询用户、删除用户，具体实现如下所示。
 
 1. 在父工程下创建建名为 user 的 Module，pom.xml 添加相关依赖

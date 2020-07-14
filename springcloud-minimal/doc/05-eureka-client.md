@@ -1,14 +1,5 @@
 # 服务提供者
 
-title: 05-服务提供者
-date: 2020-07-09 16:28:04
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 上节课说到 Eureka Server 是注册中心，分布式系统架构中的所有微服务都需要在注册中心完成注册才能被发现进而使用，我们所说的服务提供者和服务消费者是从业务角度来划分的，实际上服务提供者和服务消费者都是通过 Eureka Client 连接到 Eureka Server 完成注册，本节课我们就来一起实现一个服务提供者，并且在 Eureka Server 完成注册，大致思路是先通过 Spring Boot 搭建一个微服务应用，再通过 Eureka Client 将其注册到 Eureka Server，创建 Eureka Client 的过程与创建 Eureka Server 十分相似，如下所示。
 
 ### 代码实现服务提供者Eureka Client

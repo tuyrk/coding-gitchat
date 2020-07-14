@@ -1,14 +1,5 @@
 # Spring Cloud Feign 声明式接口调用
 
-title: 10-Spring Cloud Feign 声明式接口调用
-date: 2020-07-10 10:20:12
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 上节课我们学习了使用 **Ribbon + RestTemplate** 实现服务调用的负载均衡，在实际开发中，还有另外一种更加便捷的方式来实现同样的功能，这就是 **Feign**，本节课中我们就来学习使用 Feign 实现服务消费的负载均衡。
 
 ### 什么是 Feign

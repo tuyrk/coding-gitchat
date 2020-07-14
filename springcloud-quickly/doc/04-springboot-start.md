@@ -1,12 +1,5 @@
 # 第03课：Spring Boot 启动原理
 
-title: 04-第03课：Spring Boot 启动原理
-date: 2020-06-30 14:28:29
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 Spring Boot 大大简化了我们的开发配置，节省了大量的时间，确实比较方便。但是对于新手来说，如果不了解个中原理，难免会遇到坑。
 
 本文作者将带领大家走近神秘的 Spring Boot，一步步破开它的神秘面纱，探索 Spring Boot 的启动原理。

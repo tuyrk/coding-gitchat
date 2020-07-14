@@ -1,12 +1,5 @@
 # 第10课：消息总线
 
-title: 11-第10课：消息总线
-date: 2020-07-02 17:32:37
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 其实在上一课我们已经接触过了消息总线，那就是 Spring Cloud Bus，这一课我们将继续深入研究 Spring Cloud Bus 的一些特性。
 
 ### 局部刷新

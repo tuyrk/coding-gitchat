@@ -1,14 +1,5 @@
 # Ribbon 负载均衡
 
-title: 09-Ribbon 负载均衡
-date: 2020-07-10 00:29:25
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 在前面的课程中我们已经通过 RestTemplate 实现了服务消费者对服务提供者的调用，这只是实现了最基本的需求，如果在某个具体的业务场景下，对于某服务的调用需求激增，这时候我们就需要为该服务实现负载均衡以满足高并发访问，在一个大型的分布式应用系统中，负载均衡(Load Balancing)是必备的。
 
 ### 什么是 Ribbon？

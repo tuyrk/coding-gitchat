@@ -1,14 +1,5 @@
 # Spring Cloud Config 远程配置
 
-title: 14-Spring Cloud Config 远程配置
-date: 2020-07-13 10:00:55
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 前面的课程我们学习了本地 Config Server 的搭建方式，本节课我们一起学习远程 Config Server 的环境搭建，即将各个微服务的配置文件放置在远程 Git 仓库中，通过 Config Server 进行统一管理。本课程中我们使用基于 Git 的第三方代码托管远程仓库 GitHub 作为远程仓库，实际开发中也可以使用 Gitee、SVN 或者自己搭建的私服作为远程仓库，Config Server 结构如下图所示。
 
 ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggp468m4i8j31ej0u013b.jpg)

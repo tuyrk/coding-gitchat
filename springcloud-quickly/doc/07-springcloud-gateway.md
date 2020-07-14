@@ -1,12 +1,5 @@
 # 第06课：服务网关
 
-title: 07-第06课：服务网关
-date: 2020-07-01 00:25:25
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 本文，我们将学习 Spring Cloud 的另一个组件：gateway，它提供**微服务的网关功能**，**即中转站**，通过它提供的接口，可以**转发不同的服务**。在学习 gateway之前，我们先接着上一篇的代码，来看看服务提供者是如何提供服务的。
 
 在服务提供者的 module 下创建 HelloController 类，添加内容如下：

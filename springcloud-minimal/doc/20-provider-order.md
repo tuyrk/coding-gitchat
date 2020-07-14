@@ -1,14 +1,5 @@
 # 服务提供者 order
 
-title: 20-服务提供者 order
-date: 2020-07-14 10:55:54
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 本节课我们来实现服务提供者 orde，order 为系统提供订单相关服务，包括添加订单、查询订单、删除订单、处理订单，具体实现如下所示。
 
 1. 在父工程下创建建名为 order 的 Module，pom.xml 添加相关依赖

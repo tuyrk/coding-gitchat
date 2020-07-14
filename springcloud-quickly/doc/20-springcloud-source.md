@@ -1,12 +1,5 @@
 # 第19课：Spring Cloud 源码解析
 
-title: 20-第19课：Spring Cloud 源码解析
-date: 2020-07-07 14:26:47
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 Spring Cloud 集成了很多第三方框架，把它的全部源码拿出来解析几本书都讲不完，也不太现实，本文带领读者分析其中一小部分源码（其余源码读者有兴趣可以继续跟进），包括 Eureka-Server、Config、~~Zuul~~ 的 starter 部分，分析其启动原理。
 
 如果我们开发出一套框架，要和 Spring Boot 集成，就需要放到它的 starter 里。因此我们分析启动原理，直接从每个框架的 starter 开始分析即可。

@@ -1,14 +1,5 @@
 # Spring Boot 快速入门
 
-title: 01-Spring Boot 快速入门
-date: 2020-07-07 18:02:28
-categories: [GitChat,SpringCloud极简入门]
-tags: [springcloud]
-
----
-
-@[TOC]
-
 从本节课开始，我们进入 Spring Boot 框架的学习，Spring Boot 是当前 Java 领域主流的技术栈，同时也是整个 Spring 全家桶中非常重要的一个模块。
 
 #### Spring Boot 简介

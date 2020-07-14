@@ -1,12 +1,5 @@
 # 第17课：Spring Cloud 实例详解——业务代码实现
 
-title: 18-第17课：Spring Cloud 实例详解——业务代码实现
-date: 2020-07-07 10:14:46
-categories: [GitChat,SpringCloud快速入门]
-tags: [springcloud]
-
----
-
 本文开始，我们将实现具体的业务，由于篇幅问题，本文将贴出部分实例代码，其余会提供一般思路。
 
 ### 公共模块
