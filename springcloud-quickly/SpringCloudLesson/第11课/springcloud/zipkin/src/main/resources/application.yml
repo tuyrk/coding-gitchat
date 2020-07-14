@@ -1,0 +1,16 @@
+server:
+  port: 9411
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  datasource:
+    url: jdbc:mysql://localhost:3306/zipkin?autoReconnect=true&useSSL=false
+    username: root
+    password: 123456
+    driverClassName: com.mysql.cj.jdbc.Driver
+zipkin:
+  storage:
+    type: mysql

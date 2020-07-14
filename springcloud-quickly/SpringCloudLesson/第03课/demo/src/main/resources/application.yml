@@ -1,0 +1,11 @@
+server:
+  servlet:
+    context-path: /api
+  tomcat:
+    max-threads: 1000
+    min-spare-threads: 50
+#    basedir: /data/tmp
+  connection-timeout: 5000
+spring:
+  profiles:
+    active: dev

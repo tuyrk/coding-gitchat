@@ -1,0 +1,32 @@
+server:
+  port: 8101
+spring:
+  application:
+    name: config
+  profiles:
+    active: dev
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/tuyrk/springcloudinactivity #配置git仓库地址
+          searchPaths: repo #配置仓库路径
+          username: tuyrk #访问git仓库的用户名
+          password: TYKtyk866895 #访问git仓库的用户密码
+      label: master #配置仓库的分支
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtualHost: /
+    publisherConfirms: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8888/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh,bus-refresh

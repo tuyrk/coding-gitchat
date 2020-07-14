@@ -1,0 +1,173 @@
+# 第17课：Spring Cloud 实例详解——业务代码实现
+
+title: 18-第17课：Spring Cloud 实例详解——业务代码实现
+date: 2020-07-07 10:14:46
+categories: [GitChat,SpringCloud快速入门]
+tags: [springcloud]
+
+---
+
+本文开始，我们将实现具体的业务，由于篇幅问题，本文将贴出部分实例代码，其余会提供一般思路。
+
+### 公共模块
+
+我们的接口会分别放在不同的工程下，其中会有公共代码，在此我们考虑将公共代码抽象出来放到公共模块 common 下。
+
+#### Bean
+
+我们提供的接口分为输入参数（request）和输出参数（response），输入参数为客户端请求时传入，输出参数为后端接口返回的数据。我们在定义接口时最好将输入参数和输出参数放到 request 和 response 包下，在定义的 Bean 下抽象出 Base 类来，如下代码：
+
+```java
+@Data
+public abstract class BaseModel {
+    private Long id;
+}
+```
+
+```java
+public abstract class BaseResponse extends BaseModel { }
+```
+
+```java
+public abstract class BaseRequest { }
+```
+
+#### Service和Controller
+
+同样地，我们也可以定义出 BaseService 和 BaseController，在 BaseService 中实现公共方法：
+
+```java
+public abstract class BaseService {
+  // 密码加密算法
+  protected String encryptPassword(String password){
+    return MessageDigestUtils.encrypt(password, Algorithm.SHA1);
+  }
+
+  // 生成API鉴权的Token
+  protected String getToken(String mobile, String password){
+    return MessageDigestUtils.encrypt(mobile + password, Algorithm.SHA1);
+  }
+}
+```
+
+在 BaseController 里写公共方法：
+
+```java
+public abstract class BaseController {
+  // 接口输入参数合法性校验
+  protected void validate(BindingResult result){
+    if(result.hasFieldErrors()){
+      List<FieldError> errorList = result.getFieldErrors();
+      errorList.stream().forEach(item -> Assert.isTrue(false,item.getDefaultMessage()));
+    }
+  }
+}
+```
+
+接下来，我们就可以来实现具体的业务了。
+
+### 用户模块
+
+根据第14课提供的原型设计图，我们可以分析出，用户模块大概有如下几个接口：
+
+- 登录
+- 注册
+- 获得用户评论
+
+接下来我们来实现具体的业务（以登录为例），首先是 Bean：
+
+```java
+@Data
+public class UserBean extends BaseModel{
+    private String mobile;
+    private String password;
+}
+```
+
+```java
+@Data
+public class LoginRequest {
+    @NotEmpty
+    private String mobile;
+    @NotEmpty
+    private String password;
+}
+```
+
+其次是 Mapper（框架采用 Mybatis 的注解方式)：
+
+```java
+@Mapper
+public interface UserMapper {
+    @Select("select id,mobile,password from news_user where mobile = #{mobile} and password = #{password}")
+    List<UserBean> selectUser(String mobile, String password);
+}
+```
+
+然后是 Service（具体的业务实现）：
+
+```java
+@Transactional(rollbackFor = Exception.class)
+@Service
+public class UserService extends BaseService {
+  @Autowired
+  private UserMapper userMapper;
+
+  public SingleResult<TokenResponse> login(LoginRequest request) {
+    List<UserBean> userList = userMapper.selectUser(request.getMobile(),request.getPassword());
+    if(CollectionUtils.isEmpty(userList)) {
+      return SingleResult.buildFailure(Code.ERROR, "手机号或密码输入不正确！");
+    }
+    String token = getToken(request.getMobile(),request.getPassword());
+    TokenResponse response = new TokenResponse();
+    response.setToken(token);
+    return SingleResult.buildSuccess(response);
+  }
+```
+
+我们写的接口要提供给客户端调用，因此最后还需要添加 Controller：
+
+```java
+@RequestMapping("user")
+@RestController
+public class UserController extends BaseController {
+  @Autowired
+  private UserService userService;
+
+  @RequestMapping("login")
+  public SingleResult<TokenResponse> login(@Valid @RequestBody LoginRequest request, BindingResult result) {
+    // 必须要调用validate方法才能实现输入参数的合法性校验
+    validate(result);
+    return userService.login(request);
+  }
+}
+```
+
+这样一个完整的登录接口就写完了。
+
+为了校验我们写的接口是否有问题可以通过 JUnit 来进行单元测试：
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Application.class)
+public class TestDB {
+  @Autowired
+  private UserService userService;
+
+  @Test
+  public void test() {
+    LoginRequest request = new LoginRequest();
+    request.setMobile("13800138000");
+    request.setPassword("1");
+    System.out.println(userService.login(request));
+  }
+}
+```
+
+### 总结
+
+在定义接口之前首先应该分析该接口的输入参数和输出参数，分别定义到 request 和 response 里，在 request 里添加校验的注解，如 NotNull（不能为 null）、NotEmpty（不能为空）等等。
+
+在定义具体的接口，参数为对应的 request，返回值为 `SingleResult<Response>` 或 `MultiResult<Response>`，根据具体的业务实现具体的逻辑。
+
+最后添加 Controller，就是调用 Service 的代码，方法参数需要加上 `@Valid`，这样参数校验才会生效，在调 Service 之前调用 `validate(BindResult)` 方法会抛出参数不合法的异常。最后，通过 JUnit 进行单元测试。
