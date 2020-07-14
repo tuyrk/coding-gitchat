@@ -1,0 +1,10 @@
+server:
+  port: 8080                      #端口
+  servlet:
+    context-path: /gcspringboot   #项目访问路径
+    session:
+      cookie:                     #cookie失效时间，单位为秒
+        max-age: 100
+      timeout: 100                #session失效时间，单位为秒
+  tomcat:
+    uri-encoding: UTF-8           #请求编码格式

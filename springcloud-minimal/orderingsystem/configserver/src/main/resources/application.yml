@@ -1,0 +1,21 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: configserver
+  cloud:
+    bus:
+      trace:
+        enable: true
+    config:
+      server:
+        git:
+          uri: https://github.com/tuyrk/orderingsystem.git #git仓库地址
+          searchPaths: config #仓库路径
+          username: tuyrk #git仓库用户名
+          password: tuyrk #git仓库密码
+      label: master #仓库的分支
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
