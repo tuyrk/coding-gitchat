@@ -1,3 +1,9 @@
+# mysql-interview
+
+> Gitchat专栏《程序员的 MySQL 面试金典》(老王/张建)
+>
+> https://gitbook.cn/gitchat/column/5d80aea449b2b1063b52990f
+
 # springcloud-quickly
 
 > Gitchat专栏《Spring Cloud 快速入门》(李熠)
