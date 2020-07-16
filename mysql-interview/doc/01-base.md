@@ -95,8 +95,8 @@
 
     ```mysql
     alter table t engine=InnoDB
-    optmize table t
-    truncate table t # 清空表数据
+    optimize table t # 优化表，整理数据文件碎片
+    truncate table t # 清空表(数据+索引)
     ```
 
 15. ### 说一下重建表的执行流程？
@@ -146,13 +146,13 @@
 
 24. ### 如何避免幻读？
 
-    使用间隙锁的方式来避免出现幻读。间隙锁是专门用于解决幻读这种问题的锁，它锁的了行与行之间的间隙，能够阻塞新插入的操作
+    使用间隙锁。间隙锁是专门用于解决幻读这种问题的锁，它锁定了行与行之间的间隙，能够阻塞新插入的操作
 
     间隙锁的引入也带来了一些新的问题，比如：降低并发度，可能导致死锁。
 
 25. ### 如何查看 MySQL 的空闲连接？
 
-    在 MySQL 的命令行中使用 `show processlist;` 查看所有连接，其中 Command 列显示为 Sleep 的表示空闲连接，如下图所示：
+    在 MySQL 的命令行中使用 `show processlist;` 查看所有连接，其中 **Command 列显示为 Sleep 的表示空闲连接**，如下图所示：
 
     ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggremqjjgij319f07l0tg.jpg)
 
@@ -177,7 +177,9 @@
 
 27. ### VARCHAR 和 CHAR 的区别是什么？分别适用的场景有哪些？
 
-    VARCHAR 和 CHAR 最大区别就是，VARCHAR 的长度是可变的，而 CHAR 是固定长度，CHAR 的取值范围为1-255，因此 VARCHAR 可能会造成存储碎片。由于它们的特性决定了 **CHAR 比较适合长度较短的字段和固定长度的字段**，如身份证号、手机号等，反之则适合使用 VARCHAR。
+    区别：VARCHAR 的长度是可变的，而 CHAR 是固定长度，CHAR 的取值范围为1-255，因此 VARCHAR 可能会造成存储碎片。
+
+	适用场景：**CHAR 比较适合长度较短的字段和固定长度的字段**，如身份证号、手机号等，反之则适合使用 VARCHAR。
 
 28. ### MySQL 存储金额应该使用哪种数据类型？为什么？
 
@@ -189,9 +191,11 @@
 
 30. ### now() 和 current_date() 有什么区别？
 
-    now() 返回当前时间yyyy-MM-dd HH:mm:ss
+    now() 返回当前时间（yyyy-MM-dd HH:mm:ss）
 
-    current_date() 返回当前时间yyyy-MM-dd
+    current_date() 返回当前时间（yyyy-MM-dd）
+
+	sysdate() 返回当前时间（yyyy-MM-dd HH:mm:ss）
 
 31. ### 如何去重计算总条数？
 
@@ -211,7 +215,7 @@
 
     删除数据有两种方式：delete 和 truncate，它们的区别如下：
 
-    - delete 可以添加 where 条件删除部分数据，truncate 不能添加 where 条件只能删除整张表；
+    - delete 可以添加 where 条件删除部分数据，truncate 不能添加 where 条件,只能删除整张表；
     - delete 的删除信息会在 MySQL 的日志中记录，而 truncate 的删除信息不被记录在 MySQL 的日志中，因此 detele 的信息可以被找回而 truncate 的信息无法被找回；
     - truncate 因为不记录日志所以执行效率比 delete 快。
     
