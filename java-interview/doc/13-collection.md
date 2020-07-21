@@ -412,7 +412,7 @@ class Dog {
 
     - Comparable 位于 java.lang 包下，而 Comparator 位于 java.util 包下；
     - Comparable 在排序类的内部实现，而 Comparator 在排序类的外部实现；
-    - Comparable 需要重写 CompareTo() 方法，而 Comparator 需要重写 Compare() 方法；
+    - Comparable 需要重写 compareTo() 方法，而 Comparator 需要重写 compare() 方法；
     - Comparator 在类的外部实现，更加灵活和方便。
 
 ### 总结
