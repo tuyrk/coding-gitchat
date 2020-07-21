@@ -111,20 +111,15 @@ Spring Cloud Eureka 主要包含了服务端和客户端组件：Eureka Server �
 
    ```yaml
    server:
-     port: 8761
+     port: 8761 # 当前 Eureka Server 服务端口
    eureka:
      client:
-       register-with-eureka: false
-       fetch-registry: false
+       register-with-eureka: false # 是否将当前 Eureka Server 服务作为客户端进行注册
+       fetch-registry: false # 是否获取其他 Eureka Server 服务的数据
        service-url:
-         defaultZone: http://localhost:8761/eureka/
+         defaultZone: http://localhost:8761/eureka/ # 注册中心的访问地址
    ```
 
-   > server.port：当前 Eureka Server 服务端口
-   > eureka.client.register-with-eureka：是否将当前 Eureka Server 服务作为客户端进行注册
-   > eureka.client.fetch-registry：是否获取其他 Eureka Server 服务的数据
-   > eureka.client.service-url.defaultZone：注册中心的访问地址
-   
 6. 在启动类 RegistryCenterApplication添加`@EnableEurekaServer`注解。
 
    > 声明该类是一个 Eureka Server 微服务，提供发现服务的功能，即注册中心。
