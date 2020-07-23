@@ -75,7 +75,7 @@ class MyReflect {
 
 下面分别来看，使用反射如何调用以上三种类型的方法。
 
-#### 1.反射调用静态方法
+#### 1）反射调用静态方法
 
 ```java
 Class myClass = Class.forName("com.interview.chapter4.MyReflect");
