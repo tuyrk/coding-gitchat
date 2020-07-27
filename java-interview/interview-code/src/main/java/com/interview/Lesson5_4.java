@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * ThreadLocal
+ * ThreadLocal 有什么用 + 面试题
  */
 public class Lesson5_4 {
     // ThreadLocal 使用
