@@ -40,11 +40,9 @@ MyBatis 执行流程说明：
 5. 封装 SQL 对象，在这一步，执行器将待处理的 SQL 信息封装到一个对象中（MappedStatement），该对象包括 SQL 语句、输入参数映射信息（Java 简单类型、HashMap 或 POJO）和输出结果映射信息（Java 简单类型、HashMap 或 POJO）。
 6. 操作数据库，拥有了执行器和 SQL 信息封装对象就使用它们访问数据库了，最后再返回操作结果，结束流程。
 
-### MyBatis XML 版
+### Mybatis 使用
 
 MyBatis 使用分为两个版本：XML 版和 Java 注解版。
-
-接下来我们使用 Spring Boot 结合 MyBatis 的 XML 版，来实现对数据库的基本操作，步骤如下。
 
 1. 创建数据表
 
@@ -75,8 +73,60 @@ MyBatis 使用分为两个版本：XML 版和 Java 注解版。
      <version>8.0.16</version>
    </dependency>
    ```
-   
+
    mybatis-spring-boot-starter 是 MyBatis 官方帮助我们快速集成 Spring Boot 提供的一个组件包，mybatis-spring-boot-starter 2.1.0 对应 MyBatis 的版本是 3.5.2。
+
+3. 添加 Mapper 包扫描
+
+   在启动类中添加 @MapperScan，设置 Spring Boot 启动的时候会自动加载包路径下的 Mapper。
+
+   ```java
+   @SpringBootApplication
+   @MapperScan("com.interview.mybatislearning.mapper")
+   public class MyBatisLearningApplication {
+     public static void main(String[] args) {
+       SpringApplication.run(MyBatisLearningApplication.class, args);
+     }
+   }
+   ```
+
+4. 创建实体类
+
+   ```java
+   @Data
+   public class UserEntity implements Serializable {
+     private static final long serialVersionUID = -5980266333958177104L;
+     private Integer id;
+     private String userName;
+     private String passWord;
+     private String nickName;
+     public UserEntity(String userName, String passWord, String nickName) {
+       this.userName = userName;
+       this.passWord = passWord;
+       this.nickName = nickName;
+     }
+   }
+   ```
+
+5. 编写测试代码
+
+   ```java
+   @RunWith(SpringRunner.class)
+   @SpringBootTest
+   public class MybatislearningApplicationTests {
+     @Resource
+     private UserMapper userMapper;
+     @Test
+     public void testInsert() {
+       userMapper.insert(new UserEntity("laowang", "123456", "老王"));
+       Assert.assertEquals(1, userMapper.getAll().size());
+     }
+   }
+   ```
+
+### MyBatis XML 版
+
+接下来我们使用 Spring Boot 结合 MyBatis 的 XML 版，来实现对数据库的基本操作，步骤如下。
 
 3. 增加配置文件
 
@@ -101,101 +151,7 @@ MyBatis 使用分为两个版本：XML 版和 Java 注解版。
    
    注：如果配置文件使用的是 application.properties，配置内容是相同的，只是内容格式不同。
    
-4. 创建实体类
-
-   ```java
-   @Data
-   public class UserEntity implements Serializable {
-     private static final long serialVersionUID = -5980266333958177104L;
-     private Integer id;
-     private String userName;
-     private String passWord;
-     private String nickName;
-     public UserEntity(String userName, String passWord, String nickName) {
-       this.userName = userName;
-       this.passWord = passWord;
-       this.nickName = nickName;
-     }
-   }
-   ```
-
-5. 创建 XML 文件
-
-   mybatis-config.xml（基础配置文件）：
-
-   ```xml
-   <?xml version="1.0" encoding="UTF-8" ?>
-   <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
-   <configuration>
-     <typeAliases>
-       <typeAlias alias="Integer" type="java.lang.Integer"/>
-       <typeAlias alias="Long" type="java.lang.Long"/>
-       <typeAlias alias="HashMap" type="java.util.HashMap"/>
-       <typeAlias alias="LinkedHashMap" type="java.util.LinkedHashMap"/>
-       <typeAlias alias="ArrayList" type="java.util.ArrayList"/>
-       <typeAlias alias="LinkedList" type="java.util.LinkedList"/>
-     </typeAliases>
-   </configuration>
-   ```
-
-   mybatis-config.xml 主要是为常用的数据类型设置别名，用于减少类完全限定名的长度，比如：`resultType="Integer"` 完整示例代码如下：
-
-   ```xml
-   <select id="getAllCount" resultType="Integer">
-     select count(*) from t_user
-   </select>
-   ```
-
-   **UserMapper.xml**（业务配置文件）：
-
-   ```xml
-   <?xml version="1.0" encoding="UTF-8" ?>
-   <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-   <mapper namespace="com.interview.mybatislearning.mapper.UserMapper">
-     <resultMap id="BaseResultMap" type="com.interview.mybatislearning.model.UserEntity">
-       <id column="id" property="id" jdbcType="BIGINT"/>
-       <result column="username" property="userName" jdbcType="VARCHAR"/>
-       <result column="password" property="passWord" jdbcType="VARCHAR"/>
-       <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
-     </resultMap>
-     <sql id="Base_Column_List" >
-       id, username, password, nick_name
-     </sql>
-     <sql id="Base_Where_List">
-       <if test="userName != null  and userName != ''">
-         and userName = #{userName}
-       </if>
-     </sql>
-     <select id="getAll" resultMap="BaseResultMap">
-       SELECT <include refid="Base_Column_List"/>
-       FROM t_user
-     </select>
-     <select id="getOne" parameterType="Long" resultMap="BaseResultMap" >
-       SELECT <include refid="Base_Column_List"/>
-       FROM t_user
-       WHERE id = #{id}
-     </select>
-     <insert id="insert" parameterType="com.interview.mybatislearning.model.UserEntity">
-       INSERT INTO t_user (username,password,nick_name)
-       VALUES (#{userName}, #{passWord}, #{nickName})
-     </insert>
-     <update id="update" parameterType="com.interview.mybatislearning.model.UserEntity">
-       UPDATE t_user
-       SET
-       <if test="userName != null">username = #{userName},</if>
-       <if test="passWord != null">password = #{passWord},</if>
-       nick_name = #{nickName}
-       WHERE id = #{id}
-     </update>
-     <delete id="delete" parameterType="Long">
-       DELETE FROM t_user WHERE id =#{id}
-     </delete>
-   </mapper>
-   ```
-
-   以上配置我们增加了增删改查等基础方法。
-
-6. 增加 Mapper 接口文件
+2. 增加 Mapper 接口文件
 
    此步骤我们需要创建一个与 XML 对应的业务 Mapper 接口，代码如下：
 
@@ -209,39 +165,139 @@ MyBatis 使用分为两个版本：XML 版和 Java 注解版。
    }
    ```
 
-7. 添加 Mapper 包扫描
+3. 创建 XML 文件
 
-   在启动类中添加 @MapperScan，设置 Spring Boot 启动的时候会自动加载包路径下的 Mapper。
+   - mybatis-config.xml（基础配置文件）
+
+     ```xml
+     <?xml version="1.0" encoding="UTF-8" ?>
+     <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+     <configuration>
+       <typeAliases>
+         <typeAlias alias="Integer" type="java.lang.Integer"/>
+         <typeAlias alias="Long" type="java.lang.Long"/>
+         <typeAlias alias="HashMap" type="java.util.HashMap"/>
+         <typeAlias alias="LinkedHashMap" type="java.util.LinkedHashMap"/>
+         <typeAlias alias="ArrayList" type="java.util.ArrayList"/>
+         <typeAlias alias="LinkedList" type="java.util.LinkedList"/>
+       </typeAliases>
+     </configuration>
+     ```
+
+     mybatis-config.xml 主要是为常用的数据类型设置别名，用于减少类完全限定名的长度，比如：`resultType="Integer"` 完整示例代码如下：
+
+     ```xml
+     <select id="getAllCount" resultType="Integer">
+       select count(*) from t_user
+     </select>
+     ```
+
+   - UserMapper.xml（业务配置文件）
+
+     ```xml
+     <?xml version="1.0" encoding="UTF-8" ?>
+     <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+     <mapper namespace="com.interview.mybatislearning.mapper.UserMapper">
+       <resultMap id="BaseResultMap" type="com.interview.mybatislearning.model.UserEntity">
+         <id column="id" property="id" jdbcType="BIGINT"/>
+         <result column="username" property="userName" jdbcType="VARCHAR"/>
+         <result column="password" property="passWord" jdbcType="VARCHAR"/>
+         <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+       </resultMap>
+       <sql id="Base_Column_List" >
+         id, username, password, nick_name
+       </sql>
+       <sql id="Base_Where_List">
+         <if test="userName != null  and userName != ''">
+           and userName = #{userName}
+         </if>
+       </sql>
+       <select id="getAll" resultMap="BaseResultMap">
+         SELECT <include refid="Base_Column_List"/>
+         FROM t_user
+       </select>
+       <select id="getOne" parameterType="Long" resultMap="BaseResultMap" >
+         SELECT <include refid="Base_Column_List"/>
+         FROM t_user
+         WHERE id = #{id}
+       </select>
+       <insert id="insert" parameterType="com.interview.mybatislearning.model.UserEntity">
+         INSERT INTO t_user (username,password,nick_name)
+         VALUES (#{userName}, #{passWord}, #{nickName})
+       </insert>
+       <update id="update" parameterType="com.interview.mybatislearning.model.UserEntity">
+         UPDATE t_user
+         SET
+         <if test="userName != null">username = #{userName},</if>
+         <if test="passWord != null">password = #{passWord},</if>
+         nick_name = #{nickName}
+         WHERE id = #{id}
+       </update>
+       <delete id="delete" parameterType="Long">
+         DELETE FROM t_user WHERE id =#{id}
+       </delete>
+     </mapper>
+     ```
+
+     以上配置我们增加了增删改查等基础方法。
+   
+
+### MyBatis 注解版
+
+MyBatis 最初的设计是基于 XML 配置文件的，但随着 Java 的发展（Java 1.5 开始引入注解）和 MyBatis 自身的迭代升级，终于在 MyBatis 3 之后就开始支持基于注解的开发了。
+
+下面我们使用 Spring Boot + MyBatis 注解的方式，来实现对数据库的基本操作，具体实现步骤如下。
+
+1. 增加配置文件
+
+   在 application.yml 文件中添加以下内容：
+
+   ```yaml
+   spring:
+     datasource:
+       url: jdbc:mysql://localhost:3306/learndb?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+       username: root
+       password: root
+       driver-class-name: com.mysql.cj.jdbc.Driver
+   mybatis:
+     type-aliases-package: com.interview.model
+   ```
+
+2. 增加 Mapper 文件
 
    ```java
-   @SpringBootApplication
-   @MapperScan("com.interview.mybatislearning.mapper")
-   public class MyBatisLearningApplication {
-     public static void main(String[] args) {
-       SpringApplication.run(MyBatisLearningApplication.class, args);
-     }
+   public interface UserMapper {
+     @Select("select * from t_user")
+     @Results({ @Result(property = "nickName", column = "nick_name") })
+     List<UserEntity> getAll();
+   
+     @Select("select * from t_user where id = #{id}")
+     @Results({ @Result(property = "nickName", column = "nick_name") })
+     UserEntity getOne(Long id);
+   
+     @Insert("insert into t_user(username,password,nick_name) values(#{userName}, #{passWord}, #{nickName})")
+     void insert(UserEntity user);
+   
+     @Update("update t_user set username=#{userName},nick_name=#{nickName} where id =#{id}")
+     void update(UserEntity user);
+   
+     @Update({"<script> ",
+              "update t_user ",
+              "<set>",
+              " <if test='userName != null'>userName=#{userName},</if>",
+              " <if test='nickName != null'>nick_name=#{nickName},</if>",
+              " </set> ",
+              "where id=#{id} ",
+              "</script>"})
+     void updateUserEntity(UserEntity user);
+   
+     @Delete("delete from t_user where id =#{id}")
+     void delete(Long id);
    }
    ```
 
-8. 编写测试代码
-
-   经过以上步骤之后，整个 MyBatis 的集成就算完成了。接下来我们写一个单元测试，验证一下。
-
-   ```java
-   @RunWith(SpringRunner.class)
-   @SpringBootTest
-   public class MybatislearningApplicationTests {
-     @Resource
-     private UserMapper userMapper;
-     @Test
-     public void testInsert() {
-       userMapper.insert(new UserEntity("laowang", "123456", "老王"));
-       Assert.assertEquals(1, userMapper.getAll().size());
-     }
-   }
-   ```
+   使用 @Select、@Insert、@Update、@Delete、@Results、@Result 等注解来替代 XML 配置文件。
 
 ### 总结
 
-通过本文我们知道 MyBatis 是一个优秀和灵活的数据持久化框架，MyBatis 包含 Mapper 配置、Mapper 接口、Executor、SqlSession、SqlSessionFactory 等几个重要的组件，知道了 MyBatis 基本流程：MyBatis 首先加载 Mapper 配置和 SQL 映射文件，通过创建会话工厂得到 SqlSession 对象，再执行 SQL 语句并返回操作信息。我们也使用 XML 的方式，实现了 MyBatis 对数据库的基础操作。
-
+通过本文我们知道 MyBatis 是一个优秀和灵活的数据持久化框架，MyBatis 包含 Mapper 配置、Mapper 接口、Executor、SqlSession、SqlSessionFactory 等几个重要的组件，知道了 MyBatis 基本流程：MyBatis 首先加载 Mapper 配置和 SQL 映射文件，通过创建会话工厂得到 SqlSession 对象，再执行 SQL 语句并返回操作信息。我们也使用 XML 和注解的方式，实现了 MyBatis 对数据库的基础操作。可以看出 MyBatis 注解版和 XML 版的主要区别是 Mapper 中的代码，注解版把之前在 XML 的 SQL 实现，全部都提到 Mapper 中了，这样就省去了配置 XML 的麻烦。
