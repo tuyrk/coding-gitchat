@@ -6,67 +6,67 @@
 
 ### 课程目录
 
-1. [开篇词|如何轻松获得Offer](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9/topic/5d493cfecb702a087ef935e5)
+1. [开篇词|如何轻松获得Offer](doc/01-get-offer.md)
 
 #### 第一章：Java 基础强化
 
-2. [第1-1课：Java程序是如何执行的？](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9/topic/5d4d72a269004b174ccfff43)
-3. [第1-2课：你不知道的基础数据类型和包装类——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9/topic/5d4d775d69004b174ccfff5c)
-4. [第1-3课：深入理解字符串——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-5. [第1-4课：Java中的运算符和流程控制——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-6. [第1-5课：深入了解Java中的异常处理——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-7. [第1-6课：玩转时间——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-8. [第1-7课：数组和排序算法——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
+2. [第1-1课：Java程序是如何执行的？](doc/02-java-run.md)
+3. [第1-2课：你不知道的基础数据类型和包装类——附面试题](doc/03-data-types.md)
+4. [第1-3课：深入理解字符串——附面试题](doc/04-string.md)
+5. [第1-4课：Java中的运算符和流程控制——附面试题](doc/05-operator.md)
+6. [第1-5课：深入了解Java中的异常处理——附面试题](doc/06-exception.md)
+7. [第1-6课：玩转时间——附面试题](doc/07-datetime.md)
+8. [第1-7课：数组和排序算法——附面试题](doc/08-array-sort.md)
 
 #### 第二章：各种类和克隆
 
-9. [第2-1课：类与Object——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-10. [第2-2课：各种内部类和枚举类——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-11. [第2-3课：抽象类和接口——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-12. [第2-4课：克隆和序列化——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
+9. [第2-1课：类与Object——附面试题](doc/09-class-object.md)
+10. [第2-2课：各种内部类和枚举类——附面试题](doc/10-inner-enum.md)
+11. [第2-3课：抽象类和接口——附面试题](doc/11-abstract-interface.md)
+12. [第2-4课：克隆和序列化——附面试题](doc/12-clone-serialize.md)
 
 #### 第三章：数据结构和队列
 
-13. [第3-1课：集合详解（上）——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-14. [第3-2课：集合详解（下）——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-15. [第3-3课：泛型和迭代器——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-16. [第3-4课：数据结构：队列详解——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
+13. [第3-1课：集合详解（上）——附面试题](doc/13-collection.md)
+14. [第3-2课：集合详解（下）——附面试题](doc/14-map.md)
+15. [第3-3课：泛型和迭代器——附面试题](doc/15-generic-iterator.md)
+16. [第3-4课：数据结构：队列详解——附面试题](doc/16-queue.md)
 
 #### 第四章：反射和动态代理
 
-17. [第4-1课：BIO、NIO、AIO详解——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-18. [第4-2课：反射和动态代理——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
+17. [第4-1课：BIO、NIO、AIO详解——附面试题](doc/17-io.md)
+18. [第4-2课：反射和动态代理——附面试题](doc/18-reflect-proxy.md)
 
 #### 第五章：多线程编程
 
-19. [第5-1课：线程与死锁——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-20. [第5-2课：线程池—ThreadPoolExecutor——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-21. [第5-3课：线程池—Executors——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-22. [第5-4课：ThreadLocal详解——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-23. [第5-5课：线程安全—synchronized和ReentrantLock——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-24. [第5-6课：Java并发包中的高级同步工具——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-25. [第5-7课：Java中的各种锁和CAS——附面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
+19. [第5-1课：线程与死锁——附面试题](doc/19-thread-deadlock.md)
+20. [第5-2课：线程池—ThreadPoolExecutor——附面试题](doc/20-threadpool-executor.md)
+21. [第5-3课：线程池—Executors——附面试题](doc/21-executors.md)
+22. [第5-4课：ThreadLocal详解——附面试题](doc/22-threadlocal.md)
+23. [第5-5课：线程安全—synchronized和ReentrantLock——附面试题](doc/23-synchronized-reentrantlock.md)
+24. [第5-6课：Java并发包中的高级同步工具——附面试题](doc/24-juc.md)
+25. [第5-7课：Java中的各种锁和CAS——附面试题](doc/25-lock-cas.md)
 
 #### 第六章：Java 热门框架和分布式消息队列
 
-26. [第6-1课：Spring核心和面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-27. [第6-2课：SpringMVC核心和面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-28. [第6-3课：SpringBoot核心和面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-29. [第6-4课：MyBatis核心和面试题](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-30. [第6-5课：对数据库的基本操作步骤 + 面试题]()
-31. [第6-6课：消息队列面试题汇总](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-32. [第6-7课：Java分布式框架面试题合集](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
+26. [第6-1课：Spring核心和面试题](doc/26-spring.md)
+27. [第6-2课：SpringMVC核心和面试题](doc/27-springmvc.md)
+28. [第6-3课：SpringBoot核心和面试题](doc/28-springboot.md)
+29. [第6-4课：MyBatis核心和面试题](doc/29-mybatis.md)
+30. [第6-5课：对数据库的基本操作步骤 + 面试题](doc/30-mybatis2.md)
+31. [第6-6课：消息队列面试题汇总](doc/31-mq.md)
+32. [第6-7课：Java分布式框架面试题合集](doc/32-distributed.md)
 
 #### 第七章：Java 高手进阶
 
-33. [第7-1课：MySQL面试题汇总](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-34. [第7-2课：Redis面试题汇总](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-35. [第7-3课：设计模式常见面试题汇总](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-36. [第7-4课：算法常用面试题汇总](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-37. [第7-5课：JVM面试题汇总](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-38. [第7-6课：常见面试题翻车合集](https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9)
-39. [结语|日拱一卒无有尽，功不唐捐终入海]()
-40. [加餐 | Java 面试通关攻略]()
+33. [第7-1课：MySQL面试题汇总](doc/33-mysql.md)
+34. [第7-2课：Redis面试题汇总](doc/34-redis.md)
+35. [第7-3课：设计模式常见面试题汇总](doc/35-design-patterns.md)
+36. [第7-4课：算法常用面试题汇总](doc/36-algorithm.md)
+37. [第7-5课：JVM面试题汇总](doc/37-jvm.md)
+38. [第7-6课：常见面试题翻车合集](doc/38-questions.md)
+39. [结语|日拱一卒无有尽，功不唐捐终入海](doc/39-epilogue.md)
+40. [加餐 | Java 面试通关攻略](doc/40-raiders.md)
 
 ### 专栏介绍
 
