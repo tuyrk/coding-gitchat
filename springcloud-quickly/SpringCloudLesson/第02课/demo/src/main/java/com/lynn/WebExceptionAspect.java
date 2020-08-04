@@ -1,5 +1,6 @@
 package com.lynn;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -14,12 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@Slf4j
 @Aspect
 @Component
 public class WebExceptionAspect {
-
-    private static final Logger logger = LoggerFactory.getLogger(WebExceptionAspect.class);
-
     //凡是注解了RequestMapping的方法都被拦截
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
     private void webPointcut() {
@@ -28,16 +27,15 @@ public class WebExceptionAspect {
     /**
      * 拦截web层异常，记录异常日志，并返回友好信息到前端 目前只拦截Exception，是否要拦截Error需再做考虑
      *
-     * @param e
-     *            异常对象
+     * @param e 异常对象
      */
     @AfterThrowing(pointcut = "webPointcut()", throwing = "e")
     public void handleThrowing(Exception e) {
         e.printStackTrace();
-        logger.error("发现异常！" + e.getMessage());
-        if(StringUtils.isEmpty(e.getMessage())){
+        log.error("发现异常！" + e.getMessage());
+        if (StringUtils.isEmpty(e.getMessage())) {
             writeContent(e.getMessage());
-        }else{
+        } else {
             writeContent("参数错误！");
         }
     }
@@ -45,12 +43,10 @@ public class WebExceptionAspect {
     /**
      * 将内容输出到浏览器
      *
-     * @param content
-     *            输出内容
+     * @param content 输出内容
      */
     private void writeContent(String content) {
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getResponse();
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         response.reset();
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain;charset=UTF-8");

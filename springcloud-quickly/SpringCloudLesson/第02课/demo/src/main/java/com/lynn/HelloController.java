@@ -17,29 +17,28 @@ import java.util.List;
 @RequestMapping("{version}")
 @ApiVersion(1)
 public class HelloController {
-
     @Value("${server.port}")
     String port;
     @Autowired
     private Aliyun aliyun;
+
     @RequestMapping("/hello")
     public String home(String name) {
-        return "hi "+name+",i am from port:" +port+aliyun;
+        return "hi " + name + ",i am from port:" + port + aliyun;
     }
 
     @RequestMapping("authorize")
-    public void authorize(@Valid AuthorizeIn authorize, BindingResult result){
-        if(result.hasFieldErrors()){
+    public void authorize(@Valid AuthorizeIn authorize, BindingResult result) {
+        if (result.hasFieldErrors()) {
             List<FieldError> errorList = result.getFieldErrors();
             //通过断言抛出参数不合法的异常
-            errorList.stream().forEach(item -> Assert.isTrue(false,item.getDefaultMessage()));
+            errorList.stream().forEach(item -> Assert.isTrue(false, item.getDefaultMessage()));
         }
     }
 
     @ExceptionHandler
-    public String doError(Exception ex) throws Exception{
+    public String doError(Exception ex) throws Exception {
         ex.printStackTrace();
         return ex.getMessage();
     }
-
 }

@@ -9,7 +9,6 @@ import java.lang.annotation.*;
 @Documented
 @Mapping
 public @interface ApiVersion {
-
     /**
      * 标识版本号
      *

@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.util.List;
 
 @SpringBootConfiguration
-public class WebConfig extends WebMvcConfigurationSupport{
+public class WebConfig extends WebMvcConfigurationSupport {
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
@@ -24,7 +24,7 @@ public class WebConfig extends WebMvcConfigurationSupport{
     }
 
     @Bean
-    public ApiInterceptor interceptor(){
+    public ApiInterceptor interceptor() {
         return new ApiInterceptor();
     }
 
@@ -38,13 +38,8 @@ public class WebConfig extends WebMvcConfigurationSupport{
     private String endPoint;
 
     @Bean
-    public Aliyun aliyun(){
-        return Aliyun.options()
-                .setAppKey(appKey)
-                .setAppSecret(appSecret)
-                .setBucket(bucket)
-                .setEndPoint(endPoint)
-                .build();
+    public Aliyun aliyun() {
+        return Aliyun.builder().build();
     }
 
     @Override
@@ -66,9 +61,9 @@ public class WebConfig extends WebMvcConfigurationSupport{
         4.将convert添加到converters中
          */
         //1.定义一个convert转换消息对象
-        FastJsonHttpMessageConverter fastConverter=new FastJsonHttpMessageConverter();
+        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
         //2.添加fastjson的配置信息，比如：是否要格式化返回json数据
-        FastJsonConfig fastJsonConfig=new FastJsonConfig();
+        FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(
                 SerializerFeature.PrettyFormat
         );
