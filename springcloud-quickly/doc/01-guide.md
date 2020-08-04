@@ -37,7 +37,7 @@ Spring Cloud 的优势是显而易见的。因此对于想研究微服务架构�
 
 Dubbo 只是实现了服务治理，而 Spring Cloud 实现了微服务架构的方方面面，服务治理只是其中的一个方面。下面通过一张图对其进行比较：
 
-![这里写图片描述](https://tva1.sinaimg.cn/large/007S8ZIlgy1gg80hu5zidj30jz09fq3k.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gg80hu5zidj30jz09fq3k.jpg)
 
 （图片引自：[程序猿DD](http://blog.didispace.com/microservice-framework/)，作者：翟永超）
 
