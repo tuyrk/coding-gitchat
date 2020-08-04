@@ -43,9 +43,6 @@ Spring Boot 官方推荐使用 Maven 或 Gradle 来构建项目，本教程采�
 3. 创建应用程序启动类 DemoApplication，并编写以下代码：
 
    ```java
-   import org.springframework.boot.SpringApplication;
-   import org.springframework.boot.autoconfigure.SpringBootApplication;
-   
    @SpringBootApplication
    public class DemoApplication {
      public static void main(String[] args) {
@@ -53,13 +50,10 @@ Spring Boot 官方推荐使用 Maven 或 Gradle 来构建项目，本教程采�
      }
    }
    ```
-
+   
 4. 创建一个 Controller 类 HelloController，用以测试我们的第一个基于 Spring Boot 的 Web 应用：
 
    ```java
-   import org.springframework.web.bind.annotation.RequestMapping;
-   import org.springframework.web.bind.annotation.RestController;
-   
    @RestController
    public class HelloController {
      @RequestMapping("hello")
@@ -68,7 +62,7 @@ Spring Boot 官方推荐使用 Maven 或 Gradle 来构建项目，本教程采�
      }
    }
    ```
-
+   
 5. 运行 DemoApplication 类中的 main 方法，看到下图所示内容说明应用启动成功：
 
    ![enter image description here](https://tva1.sinaimg.cn/large/007S8ZIlgy1gg80slxymaj322a0m4dma.jpg)
