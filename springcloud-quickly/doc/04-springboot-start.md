@@ -30,9 +30,9 @@ https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/s
 @EnableAutoConfiguration
 @ComponentScan
 public class Application {
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
+  }
 }
 ```
 
@@ -67,7 +67,7 @@ Spring Boot 社区推荐使用 JavaConfig 配置，所以要用到 `@Configurati
 ```java
 @SpringBootConfiguration
 public class WebConfig {
-    // bean定义
+  // bean定义
 }
 ```
 
@@ -109,7 +109,7 @@ https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/s
 ```java
 @Override
 public Class<? extends Group> getImportGroup() {
-    return AutoConfigurationGroup.class;
+  return AutoConfigurationGroup.class;
 }
 ```
 
