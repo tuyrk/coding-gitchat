@@ -110,7 +110,7 @@ mybatis:
 
 本文，我将详细介绍在实际项目中常用的注解。
 
-#### `@SpringBootApplication`
+#### @SpringBootApplication
 
 我们可以注意到 Spring Boot 支持 main 方法启动，在我们需要启动的主类中加入此注解，**告诉 Spring Boot，这个类是程序的入口**。如：
 
@@ -150,7 +150,7 @@ public class Application {
 
 其中，**@SpringBootConfiguration 表示 Spring Boot 的配置注解**，**@EnableAutoConfiguration 表示自动配置**，**@ComponentScan 表示 Spring Boot 扫描 Bean 的规则，比如扫描哪些包**。
 
-#### `@Configuration`
+#### @Configuration
 
 **加入了这个注解的类被认为是 Spring Boot 的配置类**，我们知道可以在 application.yml 设置一些配置，也可以通过代码设置配置。
 
@@ -169,7 +169,7 @@ public class WebConfig extends WebMvcConfigurationSupport{
 
 不过 **Spring Boot 官方推荐 Spring Boot 项目用 @SpringBootConfiguration 来代替 @Configuration**。
 
-#### `@Bean`
+#### @Bean
 
 这个注解是**方法级别上的注解**，主要添加在 `@Configuration` 或 `@SpringBootConfiguration` 注解的类，有时也可以添加在 `@Component` 注解的类。它的**作用是定义一个Bean**。
 
@@ -184,7 +184,7 @@ public ApiInterceptor interceptor(){
 
 那么，我们可以在 ApiInterceptor 里面注入其他 Bean，也可以在其他 Bean 注入这个类。
 
-#### `@Value`
+#### @Value
 
 通常情况下，我们需要定义一些全局变量，都会想到的方法是定义一个 public static 变量，在需要时调用，是否有其他更好的方案呢？答案是肯定的。下面请看代码：
 
@@ -318,7 +318,7 @@ public class ApiInterceptor implements HandlerInterceptor {
 
 ```java
 @SpringBootConfiguration
-public class WebConfig extends WebMvcConfigurationSupport{
+public class WebConfig extends WebMvcConfigurationSupport {
   @Override
   protected void addInterceptors(InterceptorRegistry registry) {
     super.addInterceptors(registry);
