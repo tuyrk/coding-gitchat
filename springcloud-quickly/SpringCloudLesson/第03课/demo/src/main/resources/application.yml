@@ -4,7 +4,7 @@ server:
   tomcat:
     max-threads: 1000
     min-spare-threads: 50
-#    basedir: /data/tmp
+  # basedir: /data/tmp
   connection-timeout: 5000
 spring:
   profiles:
