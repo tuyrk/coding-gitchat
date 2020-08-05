@@ -10,7 +10,7 @@ Spring Cloud Bus 用于实现在集群中传播一些状态变化（例如：配
 
 > /bus/refresh?destination=application:port
 
-其中，application 为各微服务指定的名字，port 为端口，如果我们要刷新所有指定微服务名字下的配置，则 destination 可以设置为 application：**例如：`/bus/refresh/destination=eurekaclient:`**，代表刷新所有名字为 EurekaClient 的微服务配置。
+其中，application 为各微服务指定的名字，port 为端口，如果我们要刷新所有指定微服务名字下的配置，则 destination 可以设置为 application：**例如：`/bus/refresh?destination=eurekaclient:`**，代表刷新所有名字为 EurekaClient 的微服务配置。
 
 ### 改进架构
 
@@ -67,11 +67,11 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/lynnlovemin/SpringCloudLesson.git #配置git仓库地址
-          searchPaths: 第09课/config #配置仓库路径
-          username: lynnlovemin #访问git仓库的用户名
-          password: ********** #访问git仓库的用户密码
-      label: master #配置仓库的分支
+          uri: https://github.com/lynnlovemin/SpringCloudLesson.git # 配置git仓库地址
+          searchPaths: 第09课/config # 配置仓库路径
+          username: lynnlovemin # 访问git仓库的用户名
+          password: ********** # 访问git仓库的用户密码
+      label: master # 配置仓库的分支
   rabbitmq:
     host: localhost
     port: 5672
