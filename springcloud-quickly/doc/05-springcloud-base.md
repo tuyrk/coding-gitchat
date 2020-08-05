@@ -24,10 +24,7 @@ Spring Cloud 基于 Spring Boot 框架，它不重复造轮子，而是将第三
 
 接下来，我们就先创建一个最简单的 Spring Cloud 项目。
 
-1. 新建一个 Maven 工程，ArtifactId 为 springcloud，GroupId 为 com.lynn，如图：
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ggadq3m1g2j30k10gfjsz.jpg" style="zoom: 50%;" /><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ggadq2jkbfj30k10gf74c.jpg" style="zoom: 50%;" />
-   
-   并在 pom.xml 添加依赖：
+1. 新建名为 springcloud 的 Maven 工程，并在 pom.xml 添加依赖：
    
    ```xml
    <parent>
@@ -52,14 +49,11 @@ Spring Cloud 基于 Spring Boot 框架，它不重复造轮子，而是将第三
    </dependencyManagement>
    ```
    
-2. 创建服务的注册与发现服务端，在 springcloud 工程右键 New-Module，ArtifactId 取名为 eurekaserver，如图：
-
-   ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggaed7qcyij30e60arwf2.jpg)
-   在 eurekaserver 下的 pom.xml 中添加依赖如下：
+2. 创建服务的注册与发现服务端，在 springcloud 创建名为 eurekaserver 的模块，在 eurekaserver 下的 pom.xml 中添加依赖如下：
 
    ```xml
    <dependencies>
-     <dependency>
+  <dependency>
        <groupId>org.springframework.cloud</groupId>
        <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
      </dependency>
@@ -73,7 +67,7 @@ Spring Cloud 基于 Spring Boot 框架，它不重复造轮子，而是将第三
      </dependency>
    </dependencies>
    ```
-
+   
 3. 在 eurekaserver 新建配置文件 application.yml，并添加以下内容：
 
    ```yaml
@@ -86,23 +80,23 @@ Spring Cloud 基于 Spring Boot 框架，它不重复造轮子，而是将第三
        active: dev
      cloud:
        inetutils:
-         preferred-networks: 127.0.0.1
+         preferred-networks: 127.0.0.1  # 倾向于使用的IP地址
        client:
          ip-address: 127.0.0.1
    eureka:
      server:
-       peer-node-read-timeout-ms: 3000
-       enable-self-preservation: true
+       peer-node-read-timeout-ms: 3000 # 微服务节点连接超时时间
+       enable-self-preservation: true # 是否开启自我保护
      instance:
-       prefer-ip-address: true
-       instance-id: ${spring.cloud.client.ip-address}:${server.port}
+       prefer-ip-address: true # 是否以 IP 注册到注册中心
+       instance-id: ${spring.cloud.client.ip-address}:${server.port} # 注册限制的实例 ID
      client:
        registerWithEureka: true
        fetchRegistry: false
        healthcheck:
          enabled: true
        serviceUrl:
-         defaultZone: http://127.0.0.1:8761/eureka/
+         defaultZone: http://127.0.0.1:8761/eureka/ # 注册中心默认地址
    ```
 
 4. 添加一个启动类 Application.java：
