@@ -13,7 +13,7 @@
 ```java
 @Data
 public abstract class BaseModel {
-    private Long id;
+  private Long id;
 }
 ```
 
@@ -61,29 +61,23 @@ public abstract class BaseController {
 
 ### 用户模块
 
-根据第14课提供的原型设计图，我们可以分析出，用户模块大概有如下几个接口：
-
-- 登录
-- 注册
-- 获得用户评论
+根据第14课提供的原型设计图，我们可以分析出，用户模块大概有如下几个接口：登录、注册、获得用户评论
 
 接下来我们来实现具体的业务（以登录为例），首先是 Bean：
 
 ```java
 @Data
-public class UserBean extends BaseModel{
-    private String mobile;
-    private String password;
+public class UserBean extends BaseModel {
+  private String mobile;
+  private String password;
 }
 ```
 
 ```java
 @Data
 public class LoginRequest {
-    @NotEmpty
-    private String mobile;
-    @NotEmpty
-    private String password;
+  @NotEmpty private String mobile;
+  @NotEmpty private String password;
 }
 ```
 
@@ -92,8 +86,8 @@ public class LoginRequest {
 ```java
 @Mapper
 public interface UserMapper {
-    @Select("select id,mobile,password from news_user where mobile = #{mobile} and password = #{password}")
-    List<UserBean> selectUser(String mobile, String password);
+  @Select("select id,mobile,password from news_user where mobile = #{mobile} and password = #{password}")
+  List<UserBean> selectUser(String mobile, String password);
 }
 ```
 
@@ -116,6 +110,7 @@ public class UserService extends BaseService {
     response.setToken(token);
     return SingleResult.buildSuccess(response);
   }
+}
 ```
 
 我们写的接口要提供给客户端调用，因此最后还需要添加 Controller：
