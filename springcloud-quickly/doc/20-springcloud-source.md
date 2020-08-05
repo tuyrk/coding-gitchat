@@ -27,11 +27,10 @@ public @interface EnableEurekaServer {
 {@link EurekaServerAutoConfiguration}
 @Configuration
 public class EurekaServerMarkerConfiguration {
-    @Bean
-    public Marker eurekaServerMarkerBean() { return new Marker(); }
+  @Bean
+  public Marker eurekaServerMarkerBean() { return new Marker(); }
 
-    class Marker {
-    }
+  class Marker { }
 }
 ```
 
