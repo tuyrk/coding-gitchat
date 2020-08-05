@@ -32,47 +32,43 @@ Zipkin 是 Twitter 开源的分布式跟踪系统，基于 Dapper 的论文设�
 
 要实现完整的服务器链路，需要分为服务端和客户端，下面我们来分别介绍服务端和客户端的实现： 在 Spring Boot 2.0 以前，我们需要自己实现 Zipkin 服务端，从 Spring Boot 2.0 以后，其推出了官方 Zipkin 服务端，我们只需要下载服务端 jar 包，放到服务器上，启动即可。具体操作如下：
 
-（1）从网络上下载 Zipkin 服务端的可执行 jar 包，[下载地址可点击这里获取](https://repo1.maven.org/maven2/io/zipkin/java/zipkin-server/2.9.4/zipkin-server-2.9.4-exec.jar)；
-
-（2）将 zipkin-server-2.9.4-exec.jar 修改为 zipkin.jar；
-
-（3）命令行终端进入 zipkin.jar 所在目录，执行命令：java -jar zipkin.jar。
-
-启动成功后，如图所示：
-
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ggdnedgwd1j30xz0hrtbm.jpg" style="zoom:50%;" />
+```shell
+# 下载 Zipkin 服务端的可执行 jar 包
+curl -sSL https://zipkin.io/quickstart.sh | bash -s
+java -jar zipkin.jar
+```
 
 Zipkin 服务端的默认启动端口为 9411，浏览器访问 http://localhost:9411 即可进入 Zipkin 服务端管理界面，如图：
 
-![enter image description here](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggdneefwd2j31c00fc3z3.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggdneefwd2j31c00fc3z3.jpg)
 
 单纯集成 zipkinServer 还达不到追踪的目的，还必须使我们的微服务客户端集成 Zipkin 才能跟踪微服务，下面是集成步骤。
 
-（1）在 EurekaClient 工程的 pom 文件中添加以下依赖：
+1. 在 EurekaClient 工程的 pom 文件中添加以下依赖：
 
-```xml
-<dependency>
+   ```xml
+   <dependency>
      <groupId>org.springframework.cloud</groupId>
      <artifactId>spring-cloud-sleuth-zipkin</artifactId>
-</dependency>
-```
+   </dependency>
+   ```
 
-（2）在 Git 仓库的配置文件 eurekaclient.yml 中添加以下内容：
+2. 在 Git 仓库的配置文件 eurekaclient.yml 中添加以下内容：
 
-```yaml
-spring:
-  zipkin:
-    base-url: http://localhost:9411
-  sleuth:
-    sampler:
-      percentage: 1
-```
+   ```yaml
+   spring:
+     zipkin:
+       base-url: http://localhost:9411
+     sleuth:
+       sampler:
+         percentage: 1
+   ```
 
-其中，spring.zipkin.base-url 用来指定 zipkinServer 的地址。spring.sleutch.sampler.percentage 用来指定采样请求的百分比（默认为 0.1，即 10%）。
+   其中，spring.zipkin.base-url 用来指定 zipkinServer 的地址。spring.sleutch.sampler.percentage 用来指定采样请求的百分比（默认为 0.1，即 10%）。
 
-（3）依次启动注册中心、配置中心、Zipkin、eurekaclient，依次访问 http://localhost:8763/index，http://localhost:9411，进入 Zipkin 界面后，点击 Find a trace 按钮，可以看到 trace 列表：
+3. 依次启动注册中心、配置中心、Zipkin、eurekaclient，依次访问 http://localhost:8764/index，http://localhost:9411，进入 Zipkin 界面后，点击 Find a trace 按钮，可以看到 trace 列表：
 
-![enter image description here](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggdnefwxyej31sb0u07bi.jpg)
+   ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggdnefwxyej31sb0u07bi.jpg)
 
 ### 通过消息中间件实现链路追踪
 
@@ -80,30 +76,30 @@ spring:
 
 我以 RabbitMQ 作为消息中间件进行演示。
 
-（1）命令行启动官网提供的 zipkin.jar，注意，启动时需要指定 RabbitMQ 的 host 地址，如：
+1. 命令行启动官网提供的 zipkin.jar，注意，启动时需要指定 RabbitMQ 的 host 地址，如：
 
-```shell
-java -jar zipkin.jar --RABBIT_ADDRESSES=127.0.0.1
-```
+   ```shell
+   java -jar zipkin.jar --RABBIT_ADDRESSES=127.0.0.1
+   ```
 
-其中，--RABBIT_ADDRESSES 即为 RabbitMQ 的 host 地址。
+   其中，--RABBIT_ADDRESSES 即为 RabbitMQ 的 host 地址。
 
-（2）启动完成后，我们访问 RabbitMQ 的 Web 管理界面，可以看到 Zipkin Server 已经为我们创建了一个名叫 zipkin 的队列，如图：
+2. 启动完成后，我们访问 RabbitMQ 的 Web 管理界面，可以看到 Zipkin Server 已经为我们创建了一个名叫 zipkin 的队列，如图：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ggdnega4wtj310y0i0my9.jpg" alt="enter image description here" style="zoom:65%;" />
+   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ggdnega4wtj310y0i0my9.jpg" alt="enter image description here" style="zoom:50%;" />
 
-（3）改造 EurekaClient，将 pom.xml 添加如下内容：
+3. 改造 EurekaClient，将 pom.xml 添加如下内容：
 
-```xml
-<dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
-</dependency>
-```
+   ```xml
+   <dependency>
+     <groupId>org.springframework.cloud</groupId>
+     <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+   </dependency>
+   ```
 
-（4）Git 仓库的配置文件 EurekaClient 去掉 spring.zipkin.base-url 配置。
+4. Git 仓库的配置文件 EurekaClient 去掉 spring.zipkin.base-url 配置。
 
-（5）依次启动相应工程，我们发现依然可以正常跟踪微服务。
+5. 依次启动相应工程，我们发现依然可以正常跟踪微服务。
 
 ### 存储追踪数据
 
@@ -113,69 +109,71 @@ ZipkinServer 支持多种后端数据存储，比如 MySQL、ElasticSearch、Cas
 
 以 MySQL 为例来演示如何将历史数据存储在 MySQL 中。
 
-（1）首先创建一个名为 zipkin_db 的数据库，并执行以下脚本：
+1. 首先创建一个名为 zipkin_db 的数据库，并执行以下脚本：
 
-```sql
-CREATE TABLE IF NOT EXISTS zipkin_spans (
-  `trace_id_high` BIGINT NOT NULL DEFAULT 0 COMMENT 'If non zero, this means the trace uses 128 bit traceIds instead of 64 bit',
-  `trace_id` BIGINT NOT NULL,
-  `id` BIGINT NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-  `parent_id` BIGINT,
-  `debug` BIT(1),
-  `start_ts` BIGINT COMMENT 'Span.timestamp(): epoch micros used for endTs query and to implement TTL',
-  `duration` BIGINT COMMENT 'Span.duration(): micros used for minDuration and maxDuration query'
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED CHARACTER SET=utf8 COLLATE utf8_general_ci;
+   ```mysql
+   CREATE TABLE IF NOT EXISTS zipkin_spans (
+     `trace_id_high` BIGINT NOT NULL DEFAULT 0 COMMENT 'If non zero, this means the trace uses 128 bit traceIds instead of 64 bit',
+     `trace_id` BIGINT NOT NULL,
+     `id` BIGINT NOT NULL,
+     `name` VARCHAR(255) NOT NULL,
+     `parent_id` BIGINT,
+     `debug` BIT(1),
+     `start_ts` BIGINT COMMENT 'Span.timestamp(): epoch micros used for endTs query and to implement TTL',
+     `duration` BIGINT COMMENT 'Span.duration(): micros used for minDuration and maxDuration query'
+   ) ENGINE=InnoDB ROW_FORMAT=COMPRESSED CHARACTER SET=utf8 COLLATE utf8_general_ci;
+   
+   ALTER TABLE zipkin_spans ADD UNIQUE KEY(`trace_id_high`, `trace_id`, `id`) COMMENT 'ignore insert on duplicate';
+   ALTER TABLE zipkin_spans ADD INDEX(`trace_id_high`, `trace_id`, `id`) COMMENT 'for joining with zipkin_annotations';
+   ALTER TABLE zipkin_spans ADD INDEX(`trace_id_high`, `trace_id`) COMMENT 'for getTracesByIds';
+   ALTER TABLE zipkin_spans ADD INDEX(`name`) COMMENT 'for getTraces and getSpanNames';
+   ALTER TABLE zipkin_spans ADD INDEX(`start_ts`) COMMENT 'for getTraces ordering and range';
+   
+   CREATE TABLE IF NOT EXISTS zipkin_annotations (
+     `trace_id_high` BIGINT NOT NULL DEFAULT 0 COMMENT 'If non zero, this means the trace uses 128 bit traceIds instead of 64 bit',
+     `trace_id` BIGINT NOT NULL COMMENT 'coincides with zipkin_spans.trace_id',
+     `span_id` BIGINT NOT NULL COMMENT 'coincides with zipkin_spans.id',
+     `a_key` VARCHAR(255) NOT NULL COMMENT 'BinaryAnnotation.key or Annotation.value if type == -1',
+     `a_value` BLOB COMMENT 'BinaryAnnotation.value(), which must be smaller than 64KB',
+     `a_type` INT NOT NULL COMMENT 'BinaryAnnotation.type() or -1 if Annotation',
+     `a_timestamp` BIGINT COMMENT 'Used to implement TTL; Annotation.timestamp or zipkin_spans.timestamp',
+     `endpoint_ipv4` INT COMMENT 'Null when Binary/Annotation.endpoint is null',
+     `endpoint_ipv6` BINARY(16) COMMENT 'Null when Binary/Annotation.endpoint is null, or no IPv6 address',
+     `endpoint_port` SMALLINT COMMENT 'Null when Binary/Annotation.endpoint is null',
+     `endpoint_service_name` VARCHAR(255) COMMENT 'Null when Binary/Annotation.endpoint is null'
+   ) ENGINE=InnoDB ROW_FORMAT=COMPRESSED CHARACTER SET=utf8 COLLATE utf8_general_ci;
+   
+   ALTER TABLE zipkin_annotations ADD UNIQUE KEY(`trace_id_high`, `trace_id`, `span_id`, `a_key`, `a_timestamp`) COMMENT 'Ignore insert on duplicate';
+   ALTER TABLE zipkin_annotations ADD INDEX(`trace_id_high`, `trace_id`, `span_id`) COMMENT 'for joining with zipkin_spans';
+   ALTER TABLE zipkin_annotations ADD INDEX(`trace_id_high`, `trace_id`) COMMENT 'for getTraces/ByIds';
+   ALTER TABLE zipkin_annotations ADD INDEX(`endpoint_service_name`) COMMENT 'for getTraces and getServiceNames';
+   ALTER TABLE zipkin_annotations ADD INDEX(`a_type`) COMMENT 'for getTraces';
+   ALTER TABLE zipkin_annotations ADD INDEX(`a_key`) COMMENT 'for getTraces';
+   
+   CREATE TABLE IF NOT EXISTS zipkin_dependencies (
+     `day` DATE NOT NULL,
+     `parent` VARCHAR(255) NOT NULL,
+     `child` VARCHAR(255) NOT NULL,
+     `call_count` BIGINT
+   ) ENGINE=InnoDB ROW_FORMAT=COMPRESSED CHARACTER SET=utf8 COLLATE utf8_general_ci;
+   
+   ALTER TABLE zipkin_dependencies ADD UNIQUE KEY(`day`, `parent`, `child`);
+   ```
 
-ALTER TABLE zipkin_spans ADD UNIQUE KEY(`trace_id_high`, `trace_id`, `id`) COMMENT 'ignore insert on duplicate';
-ALTER TABLE zipkin_spans ADD INDEX(`trace_id_high`, `trace_id`, `id`) COMMENT 'for joining with zipkin_annotations';
-ALTER TABLE zipkin_spans ADD INDEX(`trace_id_high`, `trace_id`) COMMENT 'for getTracesByIds';
-ALTER TABLE zipkin_spans ADD INDEX(`name`) COMMENT 'for getTraces and getSpanNames';
-ALTER TABLE zipkin_spans ADD INDEX(`start_ts`) COMMENT 'for getTraces ordering and range';
+2. 重新启动 zipkin.jar，这次启动需要指定数据库连接信息，如：
 
-CREATE TABLE IF NOT EXISTS zipkin_annotations (
-  `trace_id_high` BIGINT NOT NULL DEFAULT 0 COMMENT 'If non zero, this means the trace uses 128 bit traceIds instead of 64 bit',
-  `trace_id` BIGINT NOT NULL COMMENT 'coincides with zipkin_spans.trace_id',
-  `span_id` BIGINT NOT NULL COMMENT 'coincides with zipkin_spans.id',
-  `a_key` VARCHAR(255) NOT NULL COMMENT 'BinaryAnnotation.key or Annotation.value if type == -1',
-  `a_value` BLOB COMMENT 'BinaryAnnotation.value(), which must be smaller than 64KB',
-  `a_type` INT NOT NULL COMMENT 'BinaryAnnotation.type() or -1 if Annotation',
-  `a_timestamp` BIGINT COMMENT 'Used to implement TTL; Annotation.timestamp or zipkin_spans.timestamp',
-  `endpoint_ipv4` INT COMMENT 'Null when Binary/Annotation.endpoint is null',
-  `endpoint_ipv6` BINARY(16) COMMENT 'Null when Binary/Annotation.endpoint is null, or no IPv6 address',
-  `endpoint_port` SMALLINT COMMENT 'Null when Binary/Annotation.endpoint is null',
-  `endpoint_service_name` VARCHAR(255) COMMENT 'Null when Binary/Annotation.endpoint is null'
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED CHARACTER SET=utf8 COLLATE utf8_general_ci;
+   ```shell
+   java -jar zipkin.jar --RABBIT_ADDRESSES=127.0.0.1 --MYSQL_HOST=127.0.0.1 --MYSQL_TCP_PORT=3306 --MYSQL_USER=root --MYSQL_PASS=1qaz2wsx --MYSQL_DB=zipkin_db --STORAGE_TYPE=mysql
+   ```
 
-ALTER TABLE zipkin_annotations ADD UNIQUE KEY(`trace_id_high`, `trace_id`, `span_id`, `a_key`, `a_timestamp`) COMMENT 'Ignore insert on duplicate';
-ALTER TABLE zipkin_annotations ADD INDEX(`trace_id_high`, `trace_id`, `span_id`) COMMENT 'for joining with zipkin_spans';
-ALTER TABLE zipkin_annotations ADD INDEX(`trace_id_high`, `trace_id`) COMMENT 'for getTraces/ByIds';
-ALTER TABLE zipkin_annotations ADD INDEX(`endpoint_service_name`) COMMENT 'for getTraces and getServiceNames';
-ALTER TABLE zipkin_annotations ADD INDEX(`a_type`) COMMENT 'for getTraces';
-ALTER TABLE zipkin_annotations ADD INDEX(`a_key`) COMMENT 'for getTraces';
+   注：如果启动失败，可能的原因有：
 
-CREATE TABLE IF NOT EXISTS zipkin_dependencies (
-  `day` DATE NOT NULL,
-  `parent` VARCHAR(255) NOT NULL,
-  `child` VARCHAR(255) NOT NULL,
-  `call_count` BIGINT
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED CHARACTER SET=utf8 COLLATE utf8_general_ci;
+   - 数据库无法连接
 
-ALTER TABLE zipkin_dependencies ADD UNIQUE KEY(`day`, `parent`, `child`);
-```
+   - MySQL 版本过高（大于等于 8.0），请降低版本，如果是 MariaDB，则最好安装其官网最新版本。
 
-（2）重新启动 zipkin.jar，这次启动需要指定数据库连接信息，如：
+   - 重启工程，可以看到数据库已经存储了追踪数据，如图：
 
-java -jar zipkin.jar --RABBIT_ADDRESSES=127.0.0.1 --MYSQL_HOST=127.0.0.1 --MYSQL_TCP_PORT=3306 --MYSQL_USER=root --MYSQL_PASS=1qaz2wsx --MYSQL_DB=zipkin_db --STORAGE_TYPE=mysql
+     ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggdnecmr1tj30tz070dg0.jpg)
 
-注：如果启动失败，可能的原因有：
-
-- 数据库无法连接
-
-- MySQL 版本过高（大于等于 8.0），请降低版本，如果是 MariaDB，则最好安装其官网最新版本。
-
-- 重启工程，可以看到数据库已经存储了追踪数据，如图：
-
-  ![enter image description here](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggdnecmr1tj30tz070dg0.jpg)
-
-且重启 Zipkin Server 后，也能通过 http://localhost:9411 查询到追踪数据。
+   且重启 Zipkin Server 后，也能通过 http://localhost:9411 查询到追踪数据。

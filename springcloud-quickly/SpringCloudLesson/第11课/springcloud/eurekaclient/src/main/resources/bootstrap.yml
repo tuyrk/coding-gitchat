@@ -1,21 +1,16 @@
 spring:
-  application:
-    name: eurekaclient
-  profiles:
-    active: dev
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
-  zipkin:
-    base-url: http://localhost:9411
-  sleuth:
-    sampler:
-      percentage: 1
-
-server:
-  port: 8764
+  cloud:
+    config:
+      name: eurekaclient
+      label: master
+      discovery:
+        enabled: true
+        serviceId: config
 eureka:
   client:
     serviceUrl:
@@ -24,4 +19,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh,health,info,bus-refresh
+        include: bus-refresh
