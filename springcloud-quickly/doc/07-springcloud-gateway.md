@@ -11,7 +11,7 @@ public class HelloController {
   private int port;
 
   @RequestMapping("index")
-  public String index(){
+  public String index() {
     return "Hello World!,端口：" + port;
   }
 }
@@ -24,13 +24,11 @@ public class HelloController {
 Hello World!,端口：8762
 ```
 
-
-
 在实际的项目中，一个项目可能会包含很多个服务，**每个服务的端口和 IP 都可能不一样**。那么，如果我们以这种形式提供接口给外部调用，代价是非常大的。从安全性上考虑，系统**对外提供的接口应该进行合法性校验，防止非法请求**，如果按照这种形式，那每个服务都要写一遍校验规则，维护起来也很麻烦。
 
 这个时候，我们需要**统一的入口，接口地址全部由该入口进入，而服务只部署在局域网内供这个统一的入口调用**，这个入口就是我们通常说的**服务网关**。
 
-Spring Cloud 给我们提供了这样一个解决方案，那就是 zuul，它的作用就是进行**路由转发、异常处理和过滤拦截**。下面，我将演示如何使用 zuul 创建一个服务网关。
+Spring Cloud 给我们提供了这样一个解决方案，那就是 gateway，它的作用就是进行**路由转发、异常处理和过滤拦截**。下面，我将演示如何使用 gateway 创建一个服务网关。
 
 ### 创建 gateway 工程
 
@@ -88,7 +86,9 @@ eureka:
 
 服务网关的配置多了几项，具体含义如下。
 
-spring.cloud.gateway.discovery.locator.enabled：表示是否与服务发现组件（register）进行结合，通过 serviceId（必须设置成大写）转发到具体的服务实例。默认为 false，设为 true 便开启通过服务中心的自动根据 serviceId 创建路由的功能。路由访问方式：```http://Gateway_HOST:Gateway_PORT/ 大写的 serviceId/**```，其中微服务应用名默认大写访问。 logging.level：日志配置策略。
+- spring.cloud.gateway.discovery.locator.enabled：表示是否与服务发现组件（register）进行结合，通过 serviceId（必须设置成大写）转发到具体的服务实例。默认为 false，设为 true 便开启通过服务中心的自动根据 serviceId 创建路由的功能。路由访问方式：```http://Gateway_HOST:Gateway_PORT/ 大写的 serviceId/**```，其中微服务应用名默认大写访问。 
+
+- logging.level：日志配置策略。
 
 然后我们启动服务注册中心、服务提供者、服务网关，控制台输入以下命令并出现：
 
@@ -147,8 +147,7 @@ Hello World!,端口：8762
 ```java
 /**
  * 自定义异常处理
- * SpringBoot 提供了默认的异常处理类，这显然不符合我们的预期
- * 因此需要重写此类，返回统一的 JSON 格式
+ * SpringBoot 提供了默认的异常处理类，这显然不符合我们的预期。因此需要重写此类，返回统一的 JSON 格式
  */
 public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
   public JsonExceptionHandler(ErrorAttributes errorAttributes, ResourceProperties resourceProperties,
@@ -193,7 +192,6 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
     }
     return message.toString();
   }
-
   // 构建返回的 JSON 数据格式
   public static Map<String, Object> response(int status, String errorMessage) {
     Map<String, Object> map = new HashMap<>();
