@@ -250,20 +250,20 @@ public ServletRegistrationBean getServlet() {
 
 ```xml
 <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.40</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.10</version>
-        </dependency>
+  <groupId>org.mybatis.spring.boot</groupId>
+  <artifactId>mybatis-spring-boot-starter</artifactId>
+  <version>1.1.1</version>
+</dependency>
+<dependency>
+  <groupId>mysql</groupId>
+  <artifactId>mysql-connector-java</artifactId>
+  <version>5.1.40</version>
+</dependency>
+<dependency>
+  <groupId>com.alibaba</groupId>
+  <artifactId>druid-spring-boot-starter</artifactId>
+  <version>1.1.10</version>
+</dependency>
 ```
 
 然后在 Git 仓库创建配置文件 database.yml：
