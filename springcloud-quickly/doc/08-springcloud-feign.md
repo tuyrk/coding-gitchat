@@ -8,7 +8,7 @@ OpenFeign 是一个**声明式的 HTTP 客户端**，它简化了 HTTP 客户端
 
 ### 创建 Feign 服务
 
-1. 在根项目上创建一个 module，命名为 feign，然后在 pom.xml 添加如下内容：
+1. 在根项目上创建名为 feign 的 module，并在 pom.xml 添加如下内容：
 
    ```xml
    <dependencies>
@@ -89,7 +89,7 @@ OpenFeign 是一个**声明式的 HTTP 客户端**，它简化了 HTTP 客户端
      private ApiService apiService;
    
      @Test
-     public void test(){
+     public void test() {
        System.out.println(apiService.index());
      }
    }
