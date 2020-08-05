@@ -154,7 +154,7 @@
 
    ```java
    public interface AquiredLockWorker<T> {
-       T invokeAfterLockAquire() throws Exception;
+     T invokeAfterLockAquire() throws Exception;
    }
    ```
 
