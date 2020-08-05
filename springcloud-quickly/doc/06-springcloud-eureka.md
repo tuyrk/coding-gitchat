@@ -6,9 +6,7 @@
 
 服务注册与发现模块分为服务注册中心和服务提供者，接下来，我将一一讲解。
 
-
-
-首先，创建一个 Maven 主工程，主工程的 pom.xml 添加如下内容：
+首先，创建名为 springcloud 的 Maven 主工程，主工程的 pom.xml 添加如下内容：
 
 ```xml
 <parent>
@@ -32,17 +30,11 @@
 </dependencyManagement>
 ```
 
-接着，在主工程基础上创建两个 module：一个 module 为服务注册中心，一个 module 为服务提供者（即客户端）。
+接着，在主工程基础上创建两个 module：服务注册中心 eurekaserver，服务提供者（即客户端）eurekaclient。
 
 ### 服务注册中心
 
-1. 右键工程 -> New -> Module，如下图所示：
-
-2. 选择 next，输入 moudle 名，如下图所示：
-
-3. 点击 next -> finish，如下图所示：
-
-4. 然后在 pom.xml 添加依赖：
+在 springcloud 创建名为 eurekaserver 的模块，然后在 pom.xml 添加依赖：
 
 ```xml
 <dependencies>
@@ -107,30 +99,30 @@ eureka:
     healthcheck:
       enabled: true
     serviceUrl:
-      defaultZone: http://127.0.0.1:8761/eureka/
+      defaultZone: http://127.0.0.1:8761/eureka/ # 注册中心默认地址
 ```
 
 启动该应用程序，打开浏览器并访问：http://localhost:8761。如果看到如下界面，说明注册中心已经启动起来了：
 
-![enter image description here](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggaestdp5hj31fe0lkgnt.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggaestdp5hj31fe0lkgnt.jpg)
 
 我们可以看到 eurekaserver 将自己也注册进去了。
 
-
-
 下面说明一下注册中心各个配置项的含义。
+
+- eureka.server.peer-node-read-timeout-ms：微服务节点连接超时时间。
 
 - eureka.server.enable-self-preservation：是否开启自我保护，默认为 true，在开启自我保护的情况下，注册中心在丢失客户端时，会进入自动保护模式，注册中心并不会将该服务从注册中心删除掉。这里我设置为 false，即关闭自我保护。根据我的经验，如果设置为 true，在负载均衡条件下，一个服务挂掉后，注册中心并没有删掉该服务，会导致客户端请求的时候可能会请求到该服务，导致系统无法访问，因此我推荐将这个属性设置为 false。
 
 - eureka.instance.prefer-ip-address：是否以 IP 注册到注册中心，Eureka 默认是以 hostname 来注册的，如果设置为 false，可以 eurekaserver 管理界面显示的地址为本机 hostname，如图：
 
-  ![enter image description here](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggaesucmw6j31dk0r8wh2.jpg)
+  ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggaesucmw6j31dk0r8wh2.jpg)
   
   当然，我们也可以通过 eureka.instance.hostname 来修改 hostname 的值。读者可以尝试，并查看效果。
 
-- client.serviceUrl.defaultZone：注册中心默认地址。
-- eureka.server.peer-node-read-timeout-ms：微服务节点连接超时时间。
 - eureka.instance.instance-id：注册限制的实例 ID，即上图显示的 127.0.0.1:8761。
+
+- client.serviceUrl.defaultZone：注册中心默认地址。
 
 建议读者按照以上的配置项写就行了。
 
@@ -138,7 +130,7 @@ eureka:
 
 我们有了注册中心，那么就可以创建一个服务提供者（即客户端）注册到注册中心去了。
 
-同样地，按照注册中心的创建方式，创建一个 module，并且在 pom.xml 添加如下内容：
+同样地，按照注册中心创建名为 eurekaclient 的模块，然后在 pom.xml 添加依赖：
 
 ```xml
 <dependencies>
@@ -159,7 +151,7 @@ eureka:
 
 其中，spring-boot-starter-web 集成了 SpringMVC，在服务提供者，必须添加此依赖，否则无法启动该应用。如图：
 
-![enter image description here](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggaesvn3fhj30o405lmxn.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggaesvn3fhj30o405lmxn.jpg)
 
 然后创建 Application.java：
 
@@ -192,7 +184,7 @@ spring:
 
 然后启动该工程，重新访问：http://localhost:8761，即可看到如下界面：
 
-![enter image description here](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggaqs6tc9ej31fx0medib.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ggaqs6tc9ej31fx0medib.jpg)
 
 我们可以看到，刚刚创建的服务提供者 eurekaclient 已经被注册到注册中心了。
 
