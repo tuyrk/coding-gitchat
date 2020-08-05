@@ -20,15 +20,15 @@ Spring Boot 集成 Redis 相当简单，只需要在 pom 里加入如下依赖�
 ```java
 @Component
 public class Redis {
-    @Autowired
-    private StringRedisTemplate template;
-    // expire为过期时间，秒为单位
-    public void set(String key, String value, long expire) {
-        template.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
-    }
-    public void set(String key, String value) { template.opsForValue().set(key, value); }
-    public Object get(String key) { return template.opsForValue().get(key); }
-    public void delete(String key) { template.delete(key); }
+  @Autowired
+  private StringRedisTemplate template;
+  // expire为过期时间，秒为单位
+  public void set(String key, String value, long expire) {
+    template.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
+  }
+  public void set(String key, String value) { template.opsForValue().set(key, value); }
+  public Object get(String key) { return template.opsForValue().get(key); }
+  public void delete(String key) { template.delete(key); }
 }
 ```
 
