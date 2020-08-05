@@ -20,7 +20,7 @@ Spring Cloud Config 是一个高可用的分布式配置中心，它支持将配
 
 2. 创建配置中心。
 
-   在原有工程创建一个 moudle，命名为 config，在 pom.xml 加入配置中心的依赖：
+   在主工程创建名为 config 的 moudle，并在 pom.xml 加入配置中心的依赖：
 
    ```xml
    <dependency>
@@ -57,7 +57,7 @@ spring:
        config:
          server:
            git:
-             uri: https://github.com/tuyrk/SpringCloudLesson.git #配置git仓库地址
+             uri: https://github.com/tuyrk/SpringCloudLesson.git # 配置git仓库地址
              searchPaths: 第09课/config #配置仓库路径
              username: ****** #访问git仓库的用户名
              password: ****** #访问git仓库的用户密码
@@ -78,8 +78,7 @@ spring:
    > curl http://localhost:8888/config/dev
    {"name":"config","profiles":["dev"],"label":null,"version":"d4042a9a6e1b5904ae4902d85c3112a96d694db6","state":null,"propertySources":[]}
    ```
-```
-   
+
 3. 修改各个服务配置。
 
    我们创建配置中心的目的就是为了方便其他服务进行统一的配置管理，因此，还需要修改各个服务。
@@ -93,7 +92,7 @@ spring:
      <groupId>org.springframework.cloud</groupId>
      <artifactId>spring-cloud-starter-config</artifactId>
    </dependency>
-```
+   ```
 
    在 resources 下新建 bootstrap.yml 并删除 application.yml：
 
@@ -111,9 +110,9 @@ spring:
        service-url:
          defaultZone: http://localhost:8761/eureka/
    ```
-
+   
    在配置中心配置的 Git 仓库相应路径下创建配置文件 [eurekaclient.yml](https://github.com/tuyrk/SpringCloudLesson/blob/master/第09课/ config/eurekaclient.yml):
-
+   
    ```yaml
    server:
      port: 8763
@@ -121,7 +120,7 @@ spring:
      application:
        name: eurekaclient
    ```
-
+   
    我们依次启动注册中心、配置中心和服务提供者 eurekaclient，可以看到 eurekaclient 的监听端口为 8763，然后修改 eurekaclient.yml 的 server.port 为8764，重新启动 eurekaclient，可以看到其监听端口为 8764，说明 eurekaclient 成功从 Git 上拉取了配置。
 
 ### 配置自动刷新
@@ -153,40 +152,39 @@ spring:
 
 3. 在 HelloController 类加入 `@RefeshScope` 依赖
 
+   以上步骤就集成了手动刷新配置。下面开始进行测试。
 
-以上步骤就集成了手动刷新配置。下面开始进行测试。
+   1. 依次启动注册中心，配置中心，客户端；
 
-1. 依次启动注册中心，配置中心，客户端；
+   2. 控制台输入以下命令并出现：
 
-2. 控制台输入以下命令并出现：
+      ```shell
+      > curl http://localhost:8763/index
+      Hello World!,端口：8763
+      ```
 
-   ```shell
-   > curl http://localhost:8763/index
-   Hello World!,端口：8763
-   ```
+   3. 修改 Git 仓库远程配置文件 eurekaclient.yml 的端口为8764；
 
-3. 修改 Git 仓库远程配置文件 eurekaclient.yml 的端口为8764；
+   4. 重复步骤2，我们发现端口未发生改变；
 
-4. 重复步骤2，我们发现端口未发生改变；
+   5. refresh 端点请求配置中心刷新配置：
 
-5. refresh 端点请求配置中心刷新配置：
+      ```shell
+      > curl -X POST http://localhost:8763/actuator/refresh
+      # 重新启动日志信息
+      ```
 
-   ```shell
-   > curl -X POST http://localhost:8763/actuator/refresh
-   # 重新启动日志信息
-   ```
-   
-6. 重复步骤2，我们发现端口已发生改变，说明刷新成功！
+   6. 重复步骤2，我们发现端口已发生改变，说明刷新成功！
 
-   ```
-   Hello World!,端口：8764
-   ```
+      ```
+      Hello World!,端口：8764
+      ```
 
 #### 自动刷新配置
 
 前面我们讲了通过 `/refresh` 端点手动刷新配置，如果每个微服务的配置都需要我们手动刷新，代价无疑是巨大的。不仅如此，随着系统的不断扩张，维护也越来越麻烦。因此，我们有必要实现自动刷新配置。
 
-##### **自动刷新配置原理**
+##### 自动刷新配置原理
 
 1. 利用 Git 仓库的 WebHook，可以设置当有内容 Push 上去后，则通过 HTTP 的 POST 远程请求指定地址。
 2. 利用消息队列如 RabbitMQ、Kafka 等自动通知到每个微服务（本文以 RabbitMQ 为例讲解）。
