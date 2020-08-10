@@ -38,7 +38,7 @@
 3. 使用场景三：数据库连接池，也会使用反射调用不同类型的数据库驱动，代码如下所示：
 
    ```java
-String url = "jdbc:mysql://127.0.0.1:3306/mydb";
+   String url = "jdbc:mysql://127.0.0.1:3306/mydb";
    String username = "root";
    String password = "root";
    Class.forName("com.mysql.jdbc.Driver");
@@ -83,7 +83,7 @@ Method method = myClass.getMethod("staticMd");
 method.invoke(myClass);
 ```
 
-#### 二、反射调用公共方法
+#### 2）反射调用公共方法
 
 ```java
 Class myClass = Class.forName("com.interview.chapter4.MyReflect");
@@ -91,7 +91,7 @@ Method method2 = myClass.getMethod("publicMd");
 method2.invoke(myClass.newInstance()); // 创建实例对象（相当于 new ）
 ```
 
-#### 三、反射调用私有方法
+#### 3）反射调用私有方法
 
 ```java
 Class myClass = Class.forName("com.interview.chapter4.MyReflect");
@@ -142,8 +142,11 @@ class Cat implements Animal {
   @Override
   public void eat() { System.out.println("The cat is eating"); }
 }
+```
 
-// JDK 代理类
+JDK 代理类
+
+```java
 class AnimalProxy implements InvocationHandler {
   private Object target; // 代理对象
   public Object getInstance(Object target) {
@@ -159,13 +162,14 @@ class AnimalProxy implements InvocationHandler {
     return result;
   }
 }
+```
 
-public static void main(String[] args) {
-  // JDK 动态代理调用
-  AnimalProxy proxy = new AnimalProxy();
-  Animal dogProxy = (Animal) proxy.getInstance(new Dog());
-  dogProxy.eat();
-}
+JDK 动态代理调用
+
+```java
+AnimalProxy proxy = new AnimalProxy();
+Animal dogProxy = (Animal) proxy.getInstance(new Dog());
+dogProxy.eat();
 ```
 
 以上代码，我们通过InvocationHandler接口的invoke方法实现了动态代理，在所有请求前、后都打印了一个简单的信息。
@@ -192,6 +196,9 @@ class Panda {
     System.out.println("The panda is eating");
   }
 }
+```
+
+```java
 class CglibProxy implements MethodInterceptor {
   public Object getInstance(Class<Panda> clazz) {
     return Enhancer.create(clazz, this); // 创建代理对象(设置父类为实例类, 回调方法)
@@ -204,12 +211,14 @@ class CglibProxy implements MethodInterceptor {
     return result;
   }
 }
-public static void main(String[] args) {
-  // cglib 动态代理调用
-  CglibProxy proxy = new CglibProxy();
-  Panda panda = (Panda)proxy.getInstance(new Panda());
-  panda.eat();
-}
+```
+
+cglib 动态代理调用
+
+```java
+CglibProxy proxy = new CglibProxy();
+Panda panda = (Panda)proxy.getInstance(new Panda());
+panda.eat();
 ```
 
 以上程序执行的结果：
@@ -236,10 +245,10 @@ The panda is eating
 
 3. #### 以下描述错误的是？
 
-   A：cglib 的性能更高
-   B：Spring 中有使用 cglib 来实现动态代理
-   C：Spring 中有使用 JDK 原生的动态代理
-   D：JDK 原生动态代理性能更高
+   > A：cglib 的性能更高
+   > B：Spring 中有使用 cglib 来实现动态代理
+   > C：Spring 中有使用 JDK 原生的动态代理
+   > D：JDK 原生动态代理性能更高
 
    答：D
 
@@ -253,15 +262,14 @@ The panda is eating
        System.out.println("Private Method");
      }
    }
-   class ReflectTest {
-     public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-       Class myClass = Class.forName("MyReflect");
-       Object object = myClass.newInstance();
-       // ...补充此行代码...
-       method.setAccessible(true);
-       method.invoke(object);
-     }
-   }
+   ```
+
+   ```java
+   Class myClass = Class.forName("MyReflect");
+   Object object = myClass.newInstance();
+   // ...补充此行代码...
+   method.setAccessible(true);
+   method.invoke(object);
    ```
 
    答：Method method = myClass.getDeclaredMethod("privateMd");
