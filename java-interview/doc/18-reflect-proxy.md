@@ -128,7 +128,7 @@ method3.invoke(myClass.newInstance()); // 创建实例对象（相当于 new ）
 
 下面我们分别来看：JDK 原生动态代理和 cglib 的实现。
 
-#### 1. JDK 原生动态代理
+#### 1）JDK 原生动态代理
 
 ```java
 interface Animal {
