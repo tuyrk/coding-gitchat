@@ -39,11 +39,11 @@ Hello, Java.
 
 ThreadPoolExecutor 构造方法有以下四个，如下图所示：
 
-```
+```java
 ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue)
 ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, RejectedExecutionHandler handler)
 ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory)
-ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
+ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler)
 ```
 
 其中最后一个构造方法有 7 个构造参数，包含了前三个方法的构造参数。其代表的含义如下：
@@ -84,18 +84,6 @@ ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, Ti
 包含所有参数的 ThreadPoolExecutor 使用代码：
 
 ```java
-public class ThreadPoolExecutorTest {
-  public static void main(String[] args) throws InterruptedException, ExecutionException {
-    ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 1, 10L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(2), new MyThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
-    threadPool.allowCoreThreadTimeOut(true);
-    for (int i = 0; i < 10; i++) {
-      threadPool.execute(() -> {
-        System.out.println(Thread.currentThread().getName());
-        Thread.sleep(2000);
-      });
-    }
-  }
-}
 class MyThreadFactory implements ThreadFactory {
   private AtomicInteger count = new AtomicInteger(0);
   @Override
@@ -105,6 +93,17 @@ class MyThreadFactory implements ThreadFactory {
     t.setName(threadName);
     return t;
   }
+}
+```
+
+```java
+ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 1, 10L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(2), new MyThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
+threadPool.allowCoreThreadTimeOut(true);
+for (int i = 0; i < 10; i++) {
+  threadPool.execute(() -> {
+    System.out.println(Thread.currentThread().getName());
+    Thread.sleep(2000);
+  });
 }
 ```
 
@@ -274,18 +273,19 @@ I'm 1
    ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 1, 10L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(2), new ThreadPoolExecutor.DiscardPolicy());
    threadPool.allowCoreThreadTimeOut(true);
    for (int i = 0; i < 10; i++) {
-       threadPool.execute(new Runnable() {
-           @Override
-           public void run() {
-               // 打印线程名称
-               System.out.println(Thread.currentThread().getName());
-               Thread.sleep(2000);
-           }
-       });
-   ```
-
-   答：线程名被打印了 3 次。
-
+     threadPool.execute(new Runnable() {
+       @Override
+       public void run() {
+         // 打印线程名称
+         System.out.println(Thread.currentThread().getName());
+         Thread.sleep(2000);
+       }
+     });
+   }
+```
+   
+答：线程名被打印了 3 次。
+   
    题目解析：线程池第 1 次执行任务时，会新创建任务并执行；第 2 次执行任务时，因为没有空闲线程所以会把任务放入队列；第 3 次同样把任务放入队列，因为队列最多可以放两条数据，所以第 4 次之后的执行都会被舍弃（没有定义拒绝策略），于是就打印了 3 次线程名称。
 
 ### 总结
