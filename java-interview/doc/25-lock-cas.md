@@ -48,43 +48,42 @@ ReentrantLock 提供了公平锁和非公平锁的实现。
 ReentrantReadWriteLock 共享锁演示代码如下：
 
 ```java
-public class ReadWriteLockTest {
-  public static void main(String[] args) throws InterruptedException {
-    final MyReadWriteLock rwLock = new MyReadWriteLock();
-    // 创建读锁 r1 和 r2
-    Thread r1 = new Thread(rwLock::read, "r1");
-    Thread r2 = new Thread(rwLock::read, "r2");
-    r1.start(); r2.start();
-    // 等待同时读取线程执行完成
-    r1.join(); r2.join();
-    // 开启写锁的操作
-    new Thread(rwLock::write, "w1").start();
-    new Thread(rwLock::write, "w2").start();
-  }
-  static class MyReadWriteLock {
-    ReadWriteLock lock = new ReentrantReadWriteLock();
-    public void read() {
-      try {
-        lock.readLock().lock();
-        System.out.println("读操作，进入 | 线程：" + Thread.currentThread().getName());
-        Thread.sleep(3000);
-        System.out.println("读操作，退出 | 线程：" + Thread.currentThread().getName());
-      } catch (InterruptedException e) { } finally {
-        lock.readLock().unlock();
-      }
+class MyReadWriteLock {
+  ReadWriteLock lock = new ReentrantReadWriteLock();
+  public void read() {
+    try {
+      lock.readLock().lock();
+      System.out.println("读操作，进入 | 线程：" + Thread.currentThread().getName());
+      Thread.sleep(3000);
+      System.out.println("读操作，退出 | 线程：" + Thread.currentThread().getName());
+    } catch (InterruptedException e) { } finally {
+      lock.readLock().unlock();
     }
-    public void write() {
-      try {
-        lock.writeLock().lock();
-        System.out.println("写操作，进入 | 线程：" + Thread.currentThread().getName());
-        Thread.sleep(3000);
-        System.out.println("写操作，退出 | 线程：" + Thread.currentThread().getName());
-      } catch (InterruptedException e) { } finally {
-        lock.writeLock().unlock();
-      }
+  }
+  public void write() {
+    try {
+      lock.writeLock().lock();
+      System.out.println("写操作，进入 | 线程：" + Thread.currentThread().getName());
+      Thread.sleep(3000);
+      System.out.println("写操作，退出 | 线程：" + Thread.currentThread().getName());
+    } catch (InterruptedException e) { } finally {
+      lock.writeLock().unlock();
     }
   }
 }
+```
+
+```java
+final MyReadWriteLock rwLock = new MyReadWriteLock();
+// 创建读锁 r1 和 r2
+Thread r1 = new Thread(rwLock::read, "r1");
+Thread r2 = new Thread(rwLock::read, "r2");
+r1.start(); r2.start();
+// 等待同时读取线程执行完成
+r1.join(); r2.join();
+// 开启写锁的操作
+new Thread(rwLock::write, "w1").start();
+new Thread(rwLock::write, "w2").start();
 ```
 
 以上程序执行结果如下：
@@ -208,10 +207,10 @@ System.out.println("值：" + as.getReference() + " | Stamp：" + as.getStamp())
 
 9. #### 以下说法错误的是？
 
-   A：独占锁是指任何时候都只有一个线程能执行资源操作
-   B：共享锁指定是可以同时被多个线程读取和修改
-   C：公平锁是指多个线程按照申请锁的顺序来获取锁
-   D：非公平锁是指多个线程获取锁的顺序并不是按照申请锁的顺序，有可能后申请的线程比先申请的线程优先获取锁
+   > A：独占锁是指任何时候都只有一个线程能执行资源操作
+   > B：共享锁指定是可以同时被多个线程读取和修改
+   > C：公平锁是指多个线程按照申请锁的顺序来获取锁
+   > D：非公平锁是指多个线程获取锁的顺序并不是按照申请锁的顺序，有可能后申请的线程比先申请的线程优先获取锁
 
    答：B
 
