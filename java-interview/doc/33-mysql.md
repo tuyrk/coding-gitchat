@@ -24,12 +24,13 @@
 
    答：InnoDB 和 MyISAM 最大的区别是 InnoDB 支持事务，而 MyISAM 不支持事务，它们其他主要区别如下：
 
-   - InnoDB 支持崩溃后安全恢复，MyISAM 不支持崩溃后安全恢复；
-   - InnoDB 支持行级锁，MyISAM 不支持行级锁，只支持到表锁；
    - InnoDB 支持外键，MyISAM 不支持外键；
+   - InnoDB 支持行级锁，MyISAM 不支持行级锁，只支持到表锁；
+
+   - InnoDB 支持崩溃后安全恢复，MyISAM 不支持崩溃后安全恢复；
    - MyISAM 性能比 InnoDB 高；
-   - MyISAM 支持 FULLTEXT 类型的全文索引，InnoDB 不支持 FULLTEXT 类型的全文索引，但是 InnoDB 可以使用 sphinx 插件支持全文索引，并且效果更好；
    - InnoDB 主键查询性能高于 MyISAM。
+   - MyISAM 支持 FULLTEXT 类型的全文索引，InnoDB 不支持 FULLTEXT 类型的全文索引，但是 InnoDB 可以使用 sphinx 插件支持全文索引，并且效果更好；
 
 5. 什么叫回表查询？
 
@@ -53,10 +54,10 @@
 
 9. 清空表的所有数据性能最好的语句是？
 
-   A：delete from t
-   B：delete t
-   C：drop table t
-   D：truncate table t
+   > A：delete from t
+   > B：delete t
+   > C：drop table t
+   > D：truncate table t
 
    答：D
 
@@ -381,15 +382,15 @@
     「参考答案」常见优化方案如下：
 
     - 不做列运算，把计算都放入各个业务系统实现；
-    - 查询语句尽可能简单，大语句拆小语句，减少锁时间；
     - 不使用 select * 查询；
+    - 避免 %xx 左模糊查询；
     - or 查询改写成 in 查询；
     - 不用函数和触发器；
-    - 避免 %xx 查询；
     - 少用 join 查询；
-    - 使用同类型比较，比如 '123' 和 '123'、123 和 123；
     - 尽量避免在 where 子句中使用 != 或者 \<> 操作符，查询引用会放弃索引而进行全表扫描；
+    - 使用同类型比较，比如 '123' 和 '123'、123 和 123；
     - 列表数据使用分页查询，每页数据量不要太大。
+    - 查询语句尽可能简单，大语句拆小语句，减少锁时间；
 
 35. MySQL 毫无规律的异常重启，可能产生的原因是什么？该如何解决？
 
