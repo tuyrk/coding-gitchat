@@ -29,18 +29,17 @@
 #### 1）继承 Thread 类
 
 ```java
-class ThreadTest {
-  public static void main(String[] args) throws Exception {
-    MyThread thread = new MyThread();
-    thread.start();
-  }
-}
 class MyThread extends Thread {
   @Override
   public void run() {
     System.out.println("Thread");
   }
 }
+```
+
+```java
+MyThread thread = new MyThread();
+thread.start();
 ```
 
 以上程序执行结果如下：
@@ -52,18 +51,17 @@ Thread
 #### 2）实现 Runnable 接口
 
 ```java
-class ThreadTest {
-  public static void main(String[] args) {
-    MyRunnable runnable = new MyRunnable();
-    new Thread(runnable).start();
-  }
-}
 class MyRunnable implements Runnable {
   @Override
   public void run() {
     System.out.println("Runnable");
   }
 }
+```
+
+```java
+MyRunnable runnable = new MyRunnable();
+new Thread(runnable).start();
 ```
 
 以上程序执行结果如下：
@@ -74,20 +72,7 @@ Runnable
 
 #### 3）实现 Callable 接口
 
-请参考以下代码：
-
 ```java
-class ThreadTest {
-  public static void main(String[] args) throws Exception {
-    MyCallable callable = new MyCallable();
-    // 定义返回结果
-    FutureTask<String> result = new FutureTask(callable);
-    // 执行程序
-    new Thread(result).start();
-    // 输出返回结果
-    System.out.println(result.get());
-  }
-}
 class MyCallable implements Callable {
   @Override
   public String call() {
@@ -95,6 +80,16 @@ class MyCallable implements Callable {
     return "Success";
   }
 }
+```
+
+```java
+MyCallable callable = new MyCallable();
+// 定义返回结果
+FutureTask<String> result = new FutureTask(callable);
+// 执行程序
+new Thread(result).start();
+// 输出返回结果
+System.out.println(result.get());
 ```
 
 以上程序执行结果如下：
@@ -237,7 +232,7 @@ thread.start();
 死锁是指两个或两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象，若无外力作用，它们都将无法推进下去。
 比如，当线程 A 持有独占锁 a，并尝试去获取独占锁 b 的同时，线程 B 持有独占锁 b，并尝试获取独占锁 a 的情况下，就会发生 A B 两个线程由于互相持有对方需要的锁，而发生的阻塞现象，我们称为死锁。
 死锁示意图如下所示：
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gefi9wh3rcj30it0e50tc.jpg)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gefi9wh3rcj30it0e50tc.jpg" style="zoom:60%;" />
 死锁代码：
 
 ```java
@@ -248,11 +243,7 @@ new Thread() {
   @Override
   public void run() {
     synchronized (obj1) {
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+      Thread.sleep(1000);
       synchronized (obj2) {
         System.out.println(Thread.currentThread().getName());
       }
@@ -264,11 +255,7 @@ new Thread() {
   @Override
   public void run() {
     synchronized (obj2) {
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+      Thread.sleep(1000);
       synchronized (obj1) {
         System.out.println(Thread.currentThread().getName());
       }
@@ -321,9 +308,9 @@ new Thread() {
 
    答：wait() 和 sleep() 的区别主要体现在以下三个方面。
 
-   - 存在类的不同：sleep() 来自 Thread，wait() 来自 Object。
-   - 释放锁：sleep() 不释放锁；wait() 释放锁。
-   - 用法不同：sleep() 时间到会自动恢复；wait() 可以使用 notify()/notifyAll() 直接唤醒。
+   - 存在类的不同：wait() 来自 Object；sleep() 来自 Thread。
+   - 释放锁：wait() 释放锁；sleep() 不释放锁。
+   - 用法不同：wait() 可以使用 notify()/notifyAll() 直接唤醒；sleep() 时间到会自动恢复。
 
 5. #### 守护线程是什么？
 
@@ -331,22 +318,18 @@ new Thread() {
 
 6. #### 线程有哪些状态？
 
-   答：在 JDK 8 中，线程的状态有以下六种。
+   答：在 JDK 8 中，线程的状态有以下六种。JDK 8 线程状态的源码如下所示：
 
-   - NEW：尚未启动
-
-   - RUNNABLE：正在执行中
-
-   - BLOCKED：阻塞（被同步锁或者 IO 锁阻塞）
-
-   - WAITING：永久等待状态
-
-   - TIMED_WAITING：等待指定的时间重新被唤醒的状态
-
-   - TERMINATED：执行完成
-
-   题目分析：JDK 8 线程状态的源码如下图所示：
-   ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gefi9vmlxqj311p0mh0v2.jpg)
+   ```java
+   public enum State {
+     NEW, // 尚未启动
+     RUNNABLE, // 正在执行中
+     BLOCKED, // 阻塞（被同步锁或者 IO 锁阻塞）
+     WAITING, // 永久等待状态
+     TIMED_WAITING, // 等待指定的时间重新被唤醒的状态
+     TERMINATED; // 执行完成
+   }
+   ```
 
 7. #### 线程中的 start() 和 run() 有那些区别？
 
