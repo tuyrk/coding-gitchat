@@ -34,25 +34,21 @@
    单例模式调用代码：
 
    ```java
-   public class Lesson7_3 {
-     public static void main(String[] args) {
-       Singleton singleton1 = Singleton.getInstance();
-       Singleton singleton2 = Singleton.getInstance();
-       System.out.println(singleton1 == singleton2); 
-     }
-   }
+   Singleton singleton1 = Singleton.getInstance();
+   Singleton singleton2 = Singleton.getInstance();
+   System.out.println(singleton1 == singleton2); 
    ```
-
+   
    程序的输出结果：true
-
+   
    可以看出以上单例模式是在类加载的时候就创建了，这样会影响程序的启动速度，那如何实现单例模式的延迟加载？在使用时再创建？
 
    单例延迟加载代码：
 
    ```java
-   // 单例模式-延迟加载版
+// 单例模式-延迟加载版
    class SingletonLazy {
-     private static SingletonLazy instance;
+  private static SingletonLazy instance;
      public static SingletonLazy getInstance() {
        if (instance == null) {
          instance = new SingletonLazy();
@@ -61,15 +57,15 @@
      }
    }
    ```
-
+   
    以上为非线程安全的，单例模式如何支持多线程？
-
+   
    使用 synchronized 来保证，单例模式的线程安全代码：
 
    ```java
-   class SingletonLazy {
+class SingletonLazy {
      private static SingletonLazy instance;
-     public static synchronized SingletonLazy getInstance() {
+  public static synchronized SingletonLazy getInstance() {
        if (instance == null) {
          instance = new SingletonLazy();
        }
@@ -77,7 +73,7 @@
      }
    }
    ```
-
+   
 3. 什么是简单工厂模式？
 
    答：简单工厂模式又叫静态工厂方法模式，就是建立一个工厂类，对实现了同一接口的一些类进行实例的创建。比如，一台咖啡机就可以理解为一个工厂模式，你只需要按下想喝的咖啡品类的按钮（摩卡或拿铁），它就会给你生产一杯相应的咖啡，你不需要管它内部的具体实现，只要告诉它你的需求即可。
