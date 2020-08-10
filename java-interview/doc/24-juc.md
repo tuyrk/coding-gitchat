@@ -58,8 +58,7 @@ executorService.shutdown();
 ```
 
 执行流程如下图：
-
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gh5njset6zj30er0ih0tc.jpg)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gh5njset6zj30er0ih0tc.jpg" style="zoom:60%;" />
 
 ### CyclicBarrier 介绍和使用
 
@@ -111,8 +110,7 @@ public class CyclicBarrierTest {
 ```
 
 执行流程如下图：
-
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gh5o0govm4j30h80gfjrp.jpg)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gh5o0govm4j30h80gfjrp.jpg" style="zoom:60%;" />
 
 ### Semaphore 介绍和使用
 
@@ -146,8 +144,7 @@ Thread：pool-1-thread-5 时间：2019-07-10 21:18:46
 ```
 
 执行流程如下图：
-
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gh5o77nz6ij30n50cc74q.jpg)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gh5o77nz6ij30n50cc74q.jpg" style="zoom:60%;" />
 
 ### Phaser 介绍和使用
 
@@ -158,19 +155,6 @@ Phaser（移相器）是 JDK 7 提供的，它的功能是等待所有线程到�
 Phaser 示例代码如下：
 
 ```java
-public class Lesson5_6 {
-  public static void main(String[] args) throws InterruptedException {
-    int workerCount = 5;
-    Phaser phaser = new MyPhaser();
-    for (int i = 0; i < workerCount; i++) {
-      phaser.register(); // 注册 Phaser 等待的线程数，执行一次等待线程数 +1
-    }
-    for (int i = 0; i < workerCount; i++) {
-      new Thread(new PhaserWorker(phaser)).start(); // 执行任务
-    }
-  }
-}
-
 class PhaserWorker implements Runnable {
   private final Phaser phaser;
   public PhaserWorker(Phaser phaser) {
@@ -188,7 +172,11 @@ class PhaserWorker implements Runnable {
     phaser.arriveAndAwaitAdvance(); // 景点 2 集合完毕发车
   }
 }
-// Phaser 每个阶段完成之后的事件通知
+```
+
+Phaser 每个阶段完成之后的事件通知
+
+```java
 class MyPhaser extends  Phaser {
   @Override
   protected boolean onAdvance(int phase, int registeredParties) { // 每个阶段执行完之后的回调
@@ -206,6 +194,17 @@ class MyPhaser extends  Phaser {
         return true;
     }
   }
+}
+```
+
+```java
+int workerCount = 5;
+Phaser phaser = new MyPhaser();
+for (int i = 0; i < workerCount; i++) {
+  phaser.register(); // 注册 Phaser 等待的线程数，执行一次等待线程数 +1
+}
+for (int i = 0; i < workerCount; i++) {
+  new Thread(new PhaserWorker(phaser)).start(); // 执行任务
 }
 ```
 
@@ -233,8 +232,7 @@ Thread-0 | 到达
 ```
 
 执行流程如下图：
-
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gh5oc0dpfuj30nt09fmxe.jpg)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gh5oc0dpfuj30nt09fmxe.jpg" style="zoom:60%;" />
 
 ### 相关面试题
 
