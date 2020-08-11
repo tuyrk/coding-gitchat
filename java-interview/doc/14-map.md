@@ -227,10 +227,10 @@ final Node<K,V> getNode(int hash, Object key) {
 
 3. #### 以下说法正确的是？
 
-   A：Hashtable 和 HashMap 都是非线程安全的
-   B：ConcurrentHashMap 允许 null 作为 key
-   C：HashMap 允许 null 作为 key
-   D：Hashtable 允许 null 作为 key
+   > A：Hashtable 和 HashMap 都是非线程安全的
+   > B：ConcurrentHashMap 允许 null 作为 key
+   > C：HashMap 允许 null 作为 key
+   > D：Hashtable 允许 null 作为 key
 
    答：C
 
@@ -278,10 +278,10 @@ final Node<K,V> getNode(int hash, Object key) {
 
 5. #### 以下哪个 Set 实现了自动排序？
 
-   A：LinedHashSet
-   B：HashSet
-   C：TreeSet
-   D：AbstractSet
+   > A：LinedHashSet
+   > B：HashSet
+   > C：TreeSet
+   > D：AbstractSet
 
    答：C
 
@@ -407,13 +407,13 @@ final Node<K,V> getNode(int hash, Object key) {
     
     如果重写 hashCode() 之后，执行的结果是：
     
-```
+    ```
     true
-18 : 18
+    18 : 18
     ```
     
     这样就符合了 Java 的规定，因此重写 equals() 时一定要重写 hashCode()。
-    
+
 16. #### HashMap 在 JDK 7 多线程中使用会导致什么问题？
 
     答：HashMap 在 JDK 7 中会导致死循环的问题。因为在 JDK 7 中，多线程进行 HashMap 扩容时会导致链表的循环引用，这个时候使用 get() 获取元素时就会导致死循环，造成 CPU 100% 的情况。
