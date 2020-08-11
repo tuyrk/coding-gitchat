@@ -227,10 +227,12 @@ final Node<K,V> getNode(int hash, Object key) {
 
 3. #### 以下说法正确的是？
 
-   > A：Hashtable 和 HashMap 都是非线程安全的
-   > B：ConcurrentHashMap 允许 null 作为 key
-   > C：HashMap 允许 null 作为 key
-   > D：Hashtable 允许 null 作为 key
+   ```
+   A：Hashtable 和 HashMap 都是非线程安全的
+   B：ConcurrentHashMap 允许 null 作为 key
+   C：HashMap 允许 null 作为 key
+   D：Hashtable 允许 null 作为 key
+   ```
 
    答：C
 
@@ -278,10 +280,12 @@ final Node<K,V> getNode(int hash, Object key) {
 
 5. #### 以下哪个 Set 实现了自动排序？
 
-   > A：LinedHashSet
-   > B：HashSet
-   > C：TreeSet
-   > D：AbstractSet
+   ```
+   A：LinedHashSet
+   B：HashSet
+   C：TreeSet
+   D：AbstractSet
+   ```
 
    答：C
 
