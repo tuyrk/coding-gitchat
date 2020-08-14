@@ -6,14 +6,14 @@
 
 ### 专栏目录
 
-- [MySQL 基础模块的面试题总结]()
-- [MySQL 索引的面试题总结]()
-- [MySQL 事务的面试题总结]()
-- [MySQL 中锁的面试题总结]()
-- [MySQL 中日志的面试题总结]()
-- [MySQL 命令和内置函数]()
-- [MySQL 性能优化 & 分布式]()
-- [MySQL 常见的开放性问题]()
+- [MySQL 基础模块的面试题总结](doc/01-base.md)
+- [MySQL 索引的面试题总结](doc/02-indexes.md)
+- [MySQL 事务的面试题总结](doc/03-transaction.md)
+- [MySQL 中锁的面试题总结](doc/04-lock.md)
+- [MySQL 中日志的面试题总结](doc/05-logs.md)
+- [MySQL 命令和内置函数](doc/06-command.md)
+- [MySQL 性能优化 & 分布式](doc/07-performance.md)
+- [MySQL 常见的开放性问题](doc/08-open-ended.md)
 
 ### ~~专栏介绍~~
 
