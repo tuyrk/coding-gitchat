@@ -6,7 +6,10 @@
 # [mysql-interview](mysql-interview/README.md)
 
 > Gitchat专栏《程序员的 MySQL 面试金典》(老王/张建)
->
+
+# [redis-interview](redis-interview/README.md)
+
+> Gitchat专栏《程序员的 Redis 面试金典》(老王)
 
 # [springcloud-minimal](springcloud-minimal/README.md)
 
