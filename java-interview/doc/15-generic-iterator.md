@@ -23,6 +23,7 @@ for (int i = 0; i < arrayList.size(); i++) {
 #### 2）泛型介绍
 
 **泛型**：泛型本质上是类型参数化，解决了不确定对象的类型问题。
+
 泛型的使用，请参考以下代码：
 
 ```java
@@ -49,7 +50,7 @@ arrayList.add("Java");
 
 #### 1）为什么要用迭代器？
 
-我们回想一下，在迭代器（Iterator）没有出现之前，如果要遍历数组和集合，需要使用方法。
+在迭代器（Iterator）出现之前，如果要遍历数组和集合，需要使用方法。
 
 数组遍历，代码如下：
 
@@ -91,14 +92,14 @@ while (iterator.hasNext()) {
 
 迭代器是用来遍历容器内所有元素对象的，也是一种常见的设计模式。
 
-迭代器包含以下四个方法。
+迭代器包含以下四个方法：
 
-- hasNext():boolean —— 容器内是否还有可以访问的元素。
-- next():E —— 返回下一个元素。
-- remove():void —— 删除当前元素。
-- forEachRemaining(Consumer):void —— JDK 8 中添加的，提供一个 lambda 表达式遍历容器元素。
-
-迭代器使用如下：
+```java
+boolean hasNext() // 容器内是否还有可以访问的元素
+E next() // 返回下一个元素
+void remove() // 删除当前元素
+void forEachRemaining(Consumer) // JDK 8 中添加的，提供一个 lambda 表达式遍历容器元素
+```
 
 ```java
 List<String> list = new ArrayList<String>() {{
@@ -106,34 +107,33 @@ List<String> list = new ArrayList<String>() {{
   add("Java虚拟机");
   add("Java中文社群");
 }};
-Iterator iterator =  list.iterator();
-// 遍历
-while (iterator.hasNext()){
-  String str = (String) iterator.next();
-  if (str.equals("Java中文社群")){
-    iterator.remove();
+```
+
+- 迭代器使用如下：
+
+  ```java
+  Iterator iterator =  list.iterator();
+  // 遍历
+  while (iterator.hasNext()) {
+    String str = (String) iterator.next();
+    if (str.equals("Java中文社群")) {
+      iterator.remove();
+    }
   }
-}
-System.out.println(list);
-```
+  System.out.println(list);
+  ```
 
-程序执行结果：
+  程序执行结果：
 
-```
-[Java, Java虚拟机]
-```
+  ```
+  [Java, Java虚拟机]
+  ```
 
-forEachRemaining 使用如下：
+- forEachRemaining 使用：
 
-```java
-List<String> list = new ArrayList<String>() {{
-  add("Java");
-  add("Java虚拟机");
-  add("Java中文社群");
-}};
-// forEachRemaining 使用
-list.iterator().forEachRemaining(System.out::println);
-```
+  ```java
+  list.iterator().forEachRemaining(System.out::println);
+  ```
 
 ### 相关面试题
 
@@ -145,50 +145,62 @@ list.iterator().forEachRemaining(System.out::println);
 
    答：HashMap 的遍历分为以下四种方式。
 
-   - 方式一：entrySet 遍历
-   - 方式二：iterator 遍历
-   - 方式三：遍历所有的 key 和 value
-   - 方式四：通过 key 值遍历
-
-   以上方式的代码实现如下：
-
    ```java
    Map<String, String> hashMap = new HashMap();
    hashMap.put("name", "老王");
    hashMap.put("sex", "你猜");
-   // 方式一：entrySet 遍历
-   for (Map.Entry item : hashMap.entrySet()) {
-     System.out.println(item.getKey() + ":" + item.getValue());
-   }
-   // 方式二：iterator 遍历
-   Iterator<Map.Entry<String, String>> iterator = hashMap.entrySet().iterator();
-   while (iterator.hasNext()) {
-     Map.Entry<String, String> entry = iterator.next();
-     System.out.println(entry.getKey() + ":" + entry.getValue());
-   }
-   // 方式三：遍历所有的 key 和 value
-   for (Object k : hashMap.keySet()) {
-     // 循环所有的 key
-     System.out.println(k);
-   }
-   for (Object v : hashMap.values()) {
-     // 循环所有的值
-     System.out.println(v);
-   }
-   // 方式四：通过 key 值遍历
-   for (Object k : hashMap.keySet()) {
-     System.out.println(k + ":" + hashMap.get(k));
-   }
    ```
+
+   - 方式一：entrySet 遍历
+
+     ```java
+     for (Map.Entry item : hashMap.entrySet()) {
+       System.out.println(item.getKey() + ":" + item.getValue());
+     }
+     ```
+
+   - 方式二：iterator 遍历
+
+     ```java
+     Iterator<Map.Entry<String, String>> iterator = hashMap.entrySet().iterator();
+     while (iterator.hasNext()) {
+       Map.Entry<String, String> entry = iterator.next();
+       System.out.println(entry.getKey() + ":" + entry.getValue());
+     }
+     ```
+
+   - 方式三：遍历所有的 key 和 value
+
+     ```java
+     for (Object k : hashMap.keySet()) {
+       System.out.println(k); // 循环所有的 key
+     }
+     for (Object v : hashMap.values()) {
+       System.out.println(v); // 循环所有的值
+     }
+     ```
+
+   - 方式四：通过 key 值遍历
+
+     ```java
+     for (Object k : hashMap.keySet()) {
+       System.out.println(k + ":" + hashMap.get(k));
+     }
+     ```
 
 3. #### 以下关于泛型说法错误的是？
 
-   A：泛型可以修饰类
-   B：泛型可以修饰方法
-   C：泛型不可以修饰接口
-   D：以上说法全错
+   > A：泛型可以修饰类
+   >
+   > B：泛型可以修饰方法
+   >
+   > C：泛型不可以修饰接口
+   >
+   > D：以上说法全错
 
-   答：选 C，泛型可以修饰类、方法、接口、变量。
+   答：选 C
+
+   题目解析：泛型可以修饰接口、类、方法、变量。
    例如：
 
    ```java
@@ -204,7 +216,7 @@ list.iterator().forEachRemaining(System.out::println);
    System.out.println(list.getClass() == list2.getClass());
    ```
 
-   答：程序的执行结果是 `true`。
+   答：程序的执行结果是 `true`
 
    题目解析：Java 中泛型在编译时会进行类型擦除，因此 `List list` 和 `List list2` 类型擦除后的结果都是 java.util.ArrayLis ，进而 list.getClass() == list2.getClass() 的结果也一定是 true。
 
