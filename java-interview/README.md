@@ -1,10 +1,10 @@
-## Java 面试全解析
+# Java 面试全解析
 
 > https://gitbook.cn/gitchat/column/5d493b4dcb702a087ef935d9
 >
 > 10w 字核心知识精讲、500+ 面试题目精练，助你收割大厂 Offer
 
-### 课程目录
+### 专栏目录
 
 1. [开篇词|如何轻松获得Offer](doc/01-get-offer.md)
 
