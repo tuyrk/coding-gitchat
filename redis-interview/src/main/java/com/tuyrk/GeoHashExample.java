@@ -1,5 +1,6 @@
 package com.tuyrk;
 
+import org.junit.Test;
 import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.GeoRadiusResponse;
 import redis.clients.jedis.GeoUnit;
@@ -9,8 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 如何实现查询附近的人？
+ */
 public class GeoHashExample {
-    public static void main(String[] args) {
+    @Test
+    public void main() {
         Map<String, GeoCoordinate> map = new HashMap<>();
         map.put("xiaoming", new GeoCoordinate(116.404269, 39.913164)); // 添加小明的位置
         map.put("xiaohong", new GeoCoordinate(116.36, 39.922461)); // 添加小红的位置
