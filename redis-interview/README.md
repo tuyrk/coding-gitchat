@@ -10,8 +10,8 @@
 2. Redis 有哪些数据类型？
 3. 如何实现查询附近的人？
 4. Redis 如何实现限流功能？
-5. Redis 如何处理已经过期的数据？
-6. Redis 内存用完会怎样？
+5. Redis 内存用完会怎样？
+6. Redis 如何处理已经过期的数据？
 7. Redis 如何实现分布式锁？
 8. ￼如何保证 Redis 消息队列中的数据不丢失？
 9. 使用 Redis 如何实现延迟队列？
@@ -26,7 +26,7 @@
 
 #### 内容介绍
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ghtleu5rxdj31590u0q8u.jpg)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghtleu5rxdj31590u0q8u.jpg" alt="Redis面试内容" style="zoom:50%;" />
 
 #### 你将收获什么？
 
