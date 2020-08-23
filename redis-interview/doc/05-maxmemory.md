@@ -18,7 +18,7 @@ Redis 内存用完指的是：Redis 的运行内存超过了 Redis 设置的最�
 
 > 小贴士：32 位操作系统，默认最大内存值为 3GB。
 
-当 Redis 的内存用完之后就会触发 Redis 的内存淘汰策略，执行流程如下图所示： 
+当 Redis 的内存用完之后就会触发 Redis 的内存淘汰策略。执行流程如下图所示： 
 
 <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv4bpuu0fj307t0g9wej.jpg" style="zoom:100%;" />
 
