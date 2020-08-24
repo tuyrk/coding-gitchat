@@ -1,5 +1,6 @@
-package com.tuyrk;
+package com.tuyrk.lock;
 
+import com.tuyrk.util.JedisUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.SetParams;
 
@@ -14,7 +15,7 @@ public class DistributedLockExample {
     private static final Integer TIME_OUT = 90;     // 最大超时时间
 
     public static void main(String[] args) {
-        Jedis jedis = JedisUtils.getJedis();
+        Jedis jedis = JedisUtil.getJedis();
         // 加锁
         boolean lockResult = lock(jedis, LOCK_KEY, FLAG_ID, TIME_OUT);
         // 逻辑业务处理

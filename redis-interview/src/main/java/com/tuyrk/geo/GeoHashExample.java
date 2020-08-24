@@ -1,4 +1,4 @@
-package com.tuyrk;
+package com.tuyrk.geo;
 
 import org.junit.Test;
 import redis.clients.jedis.GeoCoordinate;

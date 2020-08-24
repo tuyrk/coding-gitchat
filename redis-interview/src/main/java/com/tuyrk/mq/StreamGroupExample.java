@@ -1,7 +1,6 @@
-package com.tuyrk;
+package com.tuyrk.mq;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tuyrk.util.JedisUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.StreamEntry;
 import redis.clients.jedis.StreamEntryID;
@@ -34,7 +33,7 @@ public class StreamGroupExample {
    * @param groupName 分组名称
    */
   public static void createGroup(String stream, String groupName) {
-    Jedis jedis = JedisUtils.getJedis();
+    Jedis jedis = JedisUtil.getJedis();
     jedis.xgroupCreate(stream, groupName, new StreamEntryID(), true);
   }
 
@@ -42,7 +41,7 @@ public class StreamGroupExample {
    * 生产者
    */
   public static void producer() {
-    Jedis jedis = JedisUtils.getJedis();
+    Jedis jedis = JedisUtil.getJedis();
     // 添加消息 1
     Map<String, String> map1 = new HashMap<>();
     map1.put("data", "redis");
@@ -59,7 +58,7 @@ public class StreamGroupExample {
    * 消费者 1
    */
   public static void consumer1() {
-    Jedis jedis = JedisUtils.getJedis();
+    Jedis jedis = JedisUtil.getJedis();
     // 消费消息
     while (true) {
       // 读取消息
@@ -78,7 +77,7 @@ public class StreamGroupExample {
    * 消费者 2
    */
   public static void consumer2() {
-    Jedis jedis = JedisUtils.getJedis();
+    Jedis jedis = JedisUtil.getJedis();
     // 消费消息
     while (true) {
       // 读取消息

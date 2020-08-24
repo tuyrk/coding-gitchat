@@ -1,4 +1,4 @@
-package com.tuyrk;
+package com.tuyrk.limiting;
 
 import org.junit.Test;
 import redis.clients.jedis.Jedis;

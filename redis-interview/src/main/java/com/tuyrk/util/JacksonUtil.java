@@ -1,4 +1,4 @@
-package com.tuyrk;
+package com.tuyrk.util;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,12 +1,12 @@
-package com.tuyrk;
+package com.tuyrk.util;
 
 import redis.clients.jedis.Jedis;
 
-public class JedisUtils {
+public class JedisUtil {
     // Redis 操作客户端
     private static Jedis JEDIS = new Jedis("127.0.0.1", 6379);
 
-    private JedisUtils() {
+    private JedisUtil() {
     }
 
     public static Jedis getJedis() {

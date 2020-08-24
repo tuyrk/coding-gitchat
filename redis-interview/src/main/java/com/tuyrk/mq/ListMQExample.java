@@ -1,4 +1,4 @@
-package com.tuyrk;
+package com.tuyrk.mq;
 
 import redis.clients.jedis.Jedis;
 

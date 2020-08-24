@@ -1,4 +1,4 @@
-package com.tuyrk;
+package com.tuyrk.lock;
 
 /**
  * 单机锁死锁的示例
