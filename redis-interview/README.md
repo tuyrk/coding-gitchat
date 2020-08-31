@@ -6,19 +6,19 @@
 
 ### 专栏目录
 
-1. Redis 属于单线程还是多线程？不同的版本有什么区别？
-2. Redis 有哪些数据类型？
-3. 如何实现查询附近的人？
-4. Redis 如何实现限流功能？
-5. Redis 内存用完会怎样？
-6. Redis 如何处理已经过期的数据？
-7. Redis 如何实现分布式锁？
-8. ￼如何保证 Redis 消息队列中的数据不丢失？
-9. 使用 Redis 如何实现延迟队列？
-10. 如何在海量数据中查询一个值是否存在？
-11. 常用的 Redis 优化手段有哪些？
-12. 如何设计不宕机的 Redis 高可用服务？
-13. Redis 面试题补充与汇总
+1. [Redis 属于单线程还是多线程？不同的版本有什么区别？](doc/01-threads.md)
+2. [Redis 有哪些数据类型？](doc/02-data-type.md)
+3. [如何实现查询附近的人？](doc/03-geo.md)
+4. [Redis 如何实现限流功能？](doc/04-current-limiting.md)
+5. [Redis 内存用完会怎样？](doc/05-maxmemory.md)
+6. [Redis 如何处理已经过期的数据？](doc/06-expire-data.md)
+7. [Redis 如何实现分布式锁？](doc/07-distributed-lock.md)
+8. [￼如何保证 Redis 消息队列中的数据不丢失？](doc/08-message-queue.md)
+9. [使用 Redis 如何实现延迟队列？](doc/09-delay-queue.md)
+10. [如何在海量数据中查询一个值是否存在？](doc/10-massive-search.md)
+11. [常用的 Redis 优化手段有哪些？](doc/11-redis-optimize.md)
+12. [如何设计不宕机的 Redis 高可用服务？](doc/12-redis-cluster.md)
+13. [Redis 面试题补充与汇总](doc/13-redis-cache.md)
 
 ### 专栏介绍
 
