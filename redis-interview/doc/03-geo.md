@@ -1,25 +1,18 @@
 # 如何实现查询附近的人？
 
-查询附近的人或者是附近的商家是一个实用且常用的功能，比如微信中“附近的人”或是美团外卖中“附近商家”等，如下图所示：
+查询附近的人或者是附近的商家是一个实用且常用的功能，比如微信中“附近的人”或是美团外卖中“附近商家”等，本文就一起来看它是如何实现的
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghtw433xafj30di0g4abg.jpg" style="zoom: 50%;" />
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghtw4aq6yzj30bu0eq77h.jpg" style="zoom:55%;" />
-
-那它是如何实现的呢？我们本文就一起来看。
-
-我们本文的面试题是，使用 Redis 如何实现查询附近的人？
+本文的面试题是：使用 Redis 如何实现查询附近的人？
 
 ### 典型回答
 
-在说如何实现地理位置查询之前，首先我们需要搞清楚地理位置查询的基础知识。
+在说如何实现地理位置查询之前，首先需要搞清楚地理位置查询的基础知识：经度和纬度。
 
-我们所处的任何位置都可以用经度和纬度来标识，经度的范围 -180 到 180，纬度的范围为：-90 到 90。纬度以赤道为界，赤道以南为负数，赤道以北为正数；经度以本初子午线 (英国格林尼治天文台) 为界，东边为正数，西边为负数。这样我们所处的位置才能在地球上被标注出来，这也成为了我们能够查询出两点之间距离的基础，如下图所示：
+任何位置都可以用经度和纬度来标识，经度的范围 -180 到 180，纬度的范围为：-90 到 90。纬度以赤道为界，赤道以南为负数，赤道以北为正数；经度以本初子午线 (英国格林尼治天文台) 为界，东边为正数，西边为负数。这样位置才能在地球上被标注出来，也成为了能够查询出两点之间距离的基础。
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghtzk2r3sdj30uh0u0b2a.jpg" style="zoom:30%;" />
+从而让查询附近的人变得简单了，只需要查询出附近几个点和自己的距离，再进行排序就可以实现“查询附近的人”的功能了，然而使用 Redis 让这一切更简单了，Redis 提供了专门用来存储地理位置的类型 GEO，使用它以及它的内置方法就可以轻松的实现“查询附近的人”了。
 
-从而让查询附近的人变得简单了，我们只需要查询出附近几个点和自己的距离，再进行排序就可以实现查询附近人的功能了，然而使用 Redis 让这一切更简单了，Redis 为我们提供了专门用来存储地理位置的类型 GEO，我们使用它以及它所内置的方法就可以轻松的实现查询附近的人了。
-
-我们可以使用 Redis 3.2 版本中新增了 GEO 类型，以及它的 georadius 命令来实现查询附近的人，例如我们可以先添加几个人的位置信息，实现命令如下：
+可以使用 Redis 3.2 版本中新增的 GEO 类型，以及它的 georadius 命令来实现查询附近的人。先添加几个人的位置信息，实现命令如下：
 
 ```shell
 > geoadd site 116.404269 39.913164 tianan
@@ -32,13 +25,11 @@
 (integer) 1
 ```
 
-使用 geoadd 命令添加位置信息，它的语法为：`geoadd key longitude latitude member [longitude latitude member ...]` 其中：
+使用 `geoadd` 命令**添加位置信息**，语法为：`geoadd key longitude latitude member [longitude latitude member ...]` 此命令支持一次添加一个或多个位置信息，其中：
 
 - longitude 表示经度
 - latitude 表示纬度
 - member 是为此经纬度起的名字
-
-此命令支持一次添加一个或多个位置信息。
 
 在查询某个人（某个经纬度）附近的人，实现命令如下:
 
@@ -50,23 +41,16 @@
 
 从上述结果中可以看出在经纬度为 116.405419,39.913164 的附近五公里范围内有两个人“tianan”和“yuetan”，于是查询附近人的功能就算实现完成了。
 
-georadius 命令语法为： `georadius key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count] [ASC|DESC]`
+使用 `georadius` 命令**查询附近的人**，语法为： `georadius key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count] [ASC|DESC]`
 
-georadius 命令可以使用以下其中一个单位：
+georadius 命令可以使用单位：m米、km千米、mi英里、ft英尺
 
-- m 表示单位为米
-- km 表示单位为千米
-- mi 表示单位为英里
-- ft 表示单位为英尺
+georadius 命令可选参数：WITHCOORD、WITHDIST、WITHHASH、COUNT count、ASC|DESC
 
-georadius 命令包含的可选参数如下：
-
-- WITHCOORD
-
-  说明：返回满足条件位置的经纬度信息。 示例代码：
+- WITHCOORD：返回满足条件位置的经纬度信息coordinate
 
   ```shell
-  > georadius site 116.405419 39.913164 5 km withcoord
+> georadius site 116.405419 39.913164 5 km withcoord
   1) 1) "tianan"
      2) 1) "116.40426903963088989"
         2) "39.91316289865137179"
@@ -74,22 +58,18 @@ georadius 命令包含的可选参数如下：
      2) 1) "116.36000186204910278"
         2) "39.92246025586381819"
   ```
-
-- WITHDIST
-
-  说明：返回满足条件位置与查询位置的直线距离。 示例代码：
+  
+- WITHDIST：返回满足条件位置与查询位置的直线距离distance
 
   ```shell
-  > georadius site 116.405419 39.913164 5 km withdist
+> georadius site 116.405419 39.913164 5 km withdist
   1) 1) "tianan"
      2) "0.0981"
   2) 1) "yuetan"
      2) "4.0100"
   ```
   
-- WITHHASH
-  
-  说明：返回满足条件位置的哈希信息。 示例代码：
+- WITHHASH：返回满足条件位置的哈希信息
   
   ```shell
   > georadius site 116.405419 39.913164 5 km withhash
@@ -99,21 +79,17 @@ georadius 命令包含的可选参数如下：
      2) (integer) 4069879797297521
   ```
   
-- COUNT count
-  
-  说明：指定返回满足条件位置的个数。 例如，指定返回一条满足条件的信息，代码如下：
+- COUNT count：指定返回满足条件位置的个数。 如返回一条满足条件的信息
   
   ```shell
   > georadius site 116.405419 39.913164 5 km count 1
   1) "tianan"
   ```
   
-- ASC|DESC
-
-  说明：从近到远|从远到近排序返回。 示例代码：
+- ASC|DESC：从近到远|从远到近排序返回
 
   ```shell
-  > georadius site 116.405419 39.913164 5 km desc
+> georadius site 116.405419 39.913164 5 km desc
   1) "yuetan"
   2) "tianan"
   > georadius site 116.405419 39.913164 5 km asc
@@ -133,7 +109,7 @@ georadius 命令包含的可选参数如下：
 
 ### 考点分析
 
-查询附近的人看似是一个复杂的问题，但深入研究之后发现借助 Redis 还是很好实现的，但别高兴的太早这只是入门题，和此知识点相关的面试题还有以下这些：
+查询附近的人看似是一个复杂的问题，但借助 Redis 还是很好实现的。和此知识点相关的面试题还有以下这些：
 
 - 如何查询位置的经纬度信息？
 - 如何在代码中实现查询附近的人？
@@ -143,17 +119,9 @@ georadius 命令包含的可选参数如下：
 
 1. #### 经纬度获取
 
-   我们可以借助在线的坐标查询系统来获取经纬度的值，例如百度的坐标系统。
+   借助在线坐标查询系统来获取经纬度的值，例如百度的坐标系统：http://api.map.baidu.com/lbsapi/getpoint/index.html
 
-   百度坐标系统的访问地址是：http://api.map.baidu.com/lbsapi/getpoint/index.html 它的缩略图如下：
-
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghu09joqv3j31aq0oejvn.jpg" style="zoom:35%;" />
-
-   我们可以在搜索栏输入位置信息，然后使用鼠标点击该区域就会出现经纬度信息，如下图所示：
-
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghu0ai5yctg30t30aekdw.gif" style="zoom:65%;" />
-
-   
+   可以在搜索栏输入位置信息，然后使用鼠标点击该区域就会出现经纬度信息
 
 2. #### 用代码实现查询附近的人
 
@@ -167,7 +135,7 @@ georadius 命令包含的可选参数如下：
    </dependency>
    ```
 
-   具体的 Java 实现代码 GeoHashExample.java 如下：
+   实现代码 GeoHashExample.java 如下：
 
    ```java
    Map<String, GeoCoordinate> map = new HashMap<>();
@@ -199,13 +167,13 @@ georadius 命令包含的可选参数如下：
 
    ```shell
    geoadd # 添加地理位置
-   geopos # 查询位置信息
-   geodist # 距离统计
    georadius # 查询某位置内的其他成员信息
+   geodist # 距离统计
+   geopos # 查询位置信息
    geohash # 查询位置的哈希值
    ```
 
-   很神奇的发现竟然没有删除命令，于是打开 GEO 的源码才发现 GEO 类型的底层其实是借助 ZSet（有序集合）实现的，因此我们可以使用 zrem 命令来删除地理位置信息，GEO 实现的主要源码为：
+   很神奇的发现竟然没有删除命令，于是打开 GEO 的源码才发现 **GEO 类型的底层是 ZSet（有序集合）实现**的，因此可以使用 zrem 命令来删除地理位置信息。GEO 实现的主要源码为：
 
     ```c++
    void geoaddCommand(client *c) {
@@ -251,8 +219,8 @@ georadius 命令包含的可选参数如下：
    }
     ```
 
-   通过上述的源码可以看出 Redis 内部使用 ZSet 来保存位置对象的，它使用 ZSet 的 Score 来存储经纬度对应的 52 位的 GEOHASH 值的。
+   通过上述源码可以看出 Redis 内部使用 ZSet 来保存位置对象的，它使用 ZSet 的 Score 来存储经纬度对应的 52 位的 GEOHASH 值的。
 
 ### 总结
 
-本文我们讲了使用 Redis 实现查询附近的人的实现方案，既使用 Redis 3.2 新增的 GEO 类型的 georadius 命令来实现，还是用 Java 代码演示了查询附近的人，并讲了 GEO 其他的几个命令的使用，以及经纬度的获取方法和 GEO 底层的实现。
+本文讲了使用 Redis 实现查询附近的人的实现方案，既使用 Redis 3.2 新增的 GEO 类型的 georadius 命令来实现，还是用 Java 代码演示了查询附近的人，并讲了 GEO 其他的几个命令的使用，以及经纬度的获取方法和 GEO 底层的实现。
