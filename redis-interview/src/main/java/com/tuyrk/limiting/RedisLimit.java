@@ -3,6 +3,7 @@ package com.tuyrk.limiting;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 /**
@@ -15,7 +16,7 @@ public class RedisLimit {
     @Test
     public void main() throws InterruptedException {
         IntStream.rangeClosed(1, 15).forEachOrdered(this::task);
-        Thread.sleep(4000); // 休眠 4s
+        TimeUnit.SECONDS.sleep(4); // 休眠 4s
         // 超过最大执行时间之后，再从发起请求
         task(16);
     }
