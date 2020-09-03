@@ -6,16 +6,16 @@
 
 ### 典型回答
 
-在 Redis 中维护了一个过期字典，会将所有已经设置了过期时间的键值全部存储到此字典中，例如我们使用设置过期时间的命令时，命令如下：
+Redis 会将**所有设置过期时间的键值都存储到过期字典**中。例如使用设置过期时间的命令时，命令如下：
 
 ```shell
 > set mykey java ex 5
 OK
 ```
 
-此命令表示 5s 之后键值为 `mykey:java` 的数据将会过期。其中 `ex` 是 `expire` 的缩写，也就是过期、到期的意思。
+此命令表示 5s 后键值为 `mykey:java` 的数据将会过期。其中 `ex` 是 `expire` 的缩写，也就是过期、到期的意思。
 
-过期时间除了上面的那种字符类型的直接设置之外，还可以使用 `expire key seconds` 的方式直接设置，示例如下：
+过期时间除了上面的那种字符类型的直接设置外，还可以使用 `expire key seconds` 的方式直接设置，示例如下：
 
 ```shell
 > set key value
@@ -26,13 +26,13 @@ OK
 
 获取键值的执行流程是：当有键值的访问请求时 Redis 会先判断此键值是否在过期字典中，如果没有表示键值没有设置过期时间（永不过期），然后就可以正常返回键值数据了；如果此键值在过期字典中则会判断当前时间是否小于过期时间，如果小于则说明此键值没有过期可以正常返回数据，反之则表示数据已过期，会删除此键值并且返回给客户端 `nil`。执行流程如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48pgb9gj30qo0gmt93.jpg" alt="Redis获取键值的执行流程" style="zoom:60%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48pgb9gj30qo0gmt93.jpg" alt="Redis获取键值的执行流程.jpg" style="zoom:50%;" />
 
 这是获取键值数据的方法流程，同时也是过期键值的判断和删除的流程。
 
 ### 考点分析
 
-本文的面试题考察的是：Redis 过期数据的删除策略，在 Redis 中为了平衡空间占用和执行效率，采用了两种删除策略，上面的回答不完全对，因为他只回答出了一种过期键值的删除策略，和此知识点相关的面试题还有以下这些：
+本文的面试题考察的是：**Redis 过期数据的删除策略**，在 Redis 中为了平衡空间占用和执行效率，采用了两种删除策略，上面的回答不完全对，因为他只回答出了一种过期键值的删除策略，和此知识点相关的面试题还有以下这些：
 
 - 常用的删除策略有哪些？Redis 使用了什么删除策略？
 - Redis 中是如何存储过期键的？
@@ -41,7 +41,7 @@ OK
 
 #### 删除策略
 
-常见的过期策略，有以下三种：定时删除、惰性删除、定期删除
+常见的过期策略，有以下三种：**定时删除**、**惰性删除**、**定期删除**
 
 1. 定时删除
 
@@ -55,9 +55,9 @@ OK
 
    不主动删除过期键，每次从数据库获取键值时判断是否过期，如果过期则删除键值，并返回 null。
 
-   优点：因为每次访问时，才会判断过期键，所以此策略只会使用很少的系统资源。
+   优点：因为每次访问时，才会判断过期键，所以此策略只会使用很少的系统资源
 
-   缺点：系统占用空间删除不及时，导致空间利用率降低，造成了一定的空间浪费。
+   缺点：系统占用空间删除不及时，导致空间利用率降低，造成了一定的空间浪费
 
    **源码解析**
 
@@ -105,7 +105,7 @@ OK
 
    惰性删除执行流程，如下图所示： 
 
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48o6kpyj30au09t0sp.jpg" alt="过期删除策略-惰性删除执行流程" style="zoom:100%;" />
+   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48o6kpyj30au09t0sp.jpg" alt="过期删除策略-惰性删除执行流程" style="zoom:90%;" />
 
 3. 定期删除
 
@@ -117,19 +117,19 @@ OK
 
    **定期删除流程**
 
-   1. 从过期字典中随机取出 20 个键；
-   2. 删除这 20 个键中过期的键；
-   3. 如果过期 key 的比例超过 25% ，重复步骤 1。
+   1. 从过期字典中随机取出 20 个键
+   2. 删除这 20 个键中过期的键
+   3. 如果过期 key 的比例超过 25% ，重复步骤 1
 
-   同时为了保证定期扫描不会出现循环过度，导致线程卡死现象，算法还增加了扫描的时间上限，默认不会超过 25ms。
+   同时为了保证定期扫描不会出现循环过度，导致线程卡死现象，算法还增加了**扫描的时间上限**，默认不会超过 25ms。
 
    定期删除的执行流程，如下图所示： 
 
-   ![过期删除策略-定期删除执行流程](https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48oipbwj306u0dwq2w.jpg)
+   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48oipbwj306u0dwq2w.jpg" alt="过期删除策略-定期删除执行流程.jpg" style="zoom:90%;" />
 
    **源码解析**
 
-   在 Redis 中定期删除的核心源码在 src/expire.c 文件下的 activeExpireCycle 方法中，源码如下：
+   Redis 定期删除的核心源码在 src/expire.c 文件下的 activeExpireCycle 方法中，源码如下：
 
    ```c++
    void activeExpireCycle(int type) {
@@ -208,10 +208,10 @@ OK
 
    这个函数有两种执行模式：快速模式、慢速模式。体现是代码中的 timelimit 变量，这个变量是用来约束此函数的运行时间的。
 
-   - 快速模式下 timelimit 的值是固定的，等于预定义常量 ACTIVE_EXPIRE_CYCLE_FAST_DURATION；
-   - 慢速模式下 timelimit 的值是通过 1000000*ACTIVE_EXPIRE_CYCLE_SLOW_TIME_PERC/server.hz/100 计算的。
+   - 快速模式下 timelimit 的值是固定的，等于预定义常量 ACTIVE_EXPIRE_CYCLE_FAST_DURATION
+   - 慢速模式下 timelimit 的值是通过 1000000*ACTIVE_EXPIRE_CYCLE_SLOW_TIME_PERC/server.hz/100 计算的
    
-   如果只使用惰性删除会导致删除数据不及时造成一定的空间浪费，又因为 Redis 本身的主线程是单线程执行的，如果因为删除操作而影响主业务的执行就得不偿失了，为此 Redis 需要制定多个过期删除策略：惰性删除+定期删除的过期策略，来保证 Redis 能够及时并高效的删除 Redis 中的过期键。
+   如果只使用惰性删除会导致删除数据不及时造成一定的空间浪费，又因为 Redis 本身的主线程是单线程执行的，如果因为删除操作而影响主业务的执行就得不偿失了，为此 Redis 需要制定多个过期删除策略：**惰性删除+定期删除**的过期策略，来保证 Redis 能够及时并高效的删除 Redis 中的过期键。
 
 #### 过期键
 
@@ -233,7 +233,7 @@ typedef struct redisDb {
 
 过期键的数据结构如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48oxmz8j30g30b70sl.jpg" alt="过期键数据结构" style="zoom:80%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48oxmz8j30g30b70sl.jpg" alt="过期键数据结构.jpg" style="zoom:80%;" />
 
 ### 总结
 
