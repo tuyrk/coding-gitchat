@@ -2,6 +2,8 @@ package com.tuyrk.mq;
 
 import redis.clients.jedis.Jedis;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 消息队列的具体实现：List 版
  */
@@ -20,9 +22,9 @@ public class ListMQExample {
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         // 推送消息
         jedis.lpush(CHANNEL, "Hello, List.");
-        Thread.sleep(1000);
+        TimeUnit.SECONDS.sleep(1);
         jedis.lpush(CHANNEL, "message 2.");
-        Thread.sleep(2000);
+        TimeUnit.SECONDS.sleep(2);
         jedis.lpush(CHANNEL, "message 3.");
     }
 

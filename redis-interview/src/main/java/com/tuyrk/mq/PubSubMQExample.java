@@ -3,6 +3,8 @@ package com.tuyrk.mq;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 消息队列的具体实现：Pub/Sub 实现方式
  */
@@ -11,7 +13,7 @@ public class PubSubMQExample {
 
     public static void main(String[] args) throws InterruptedException {
         new Thread(PubSubMQExample::consumer).start(); // 创建一个新线程作为消费者
-        Thread.sleep(500); // 暂停 0.5s 等待消费者初始化
+        TimeUnit.MILLISECONDS.sleep(500); // 暂停 0.5s 等待消费者初始化
         producer(); // 生产者发送消息
     }
 
