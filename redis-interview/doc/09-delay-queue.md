@@ -8,7 +8,7 @@
 
 延迟消息队列的常见实现方式是通过 ZSet 的存储与查询来实现，它的核心思想是在程序中开启一个一直循环的延迟任务的检测器，用于检测和调用延迟任务的执行。如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi1xy85uvmj30w40ccjru.jpg" alt="延迟消息队列" style="zoom:60%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi1xy85uvmj30w40ccjru.jpg" alt="延迟消息队列.jpg" style="zoom:50%;" />
 
 ZSet 实现延迟任务的方式有两种：
 
