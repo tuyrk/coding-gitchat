@@ -10,12 +10,13 @@ Redis 作为一个独立的三方系统（通常被作为缓存中间件使用�
 
 分布式锁的示意图，如下所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi128lc3hsj30og0eo3yz.jpg" alt="分布式锁的示意图" style="zoom:70%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi128lc3hsj30og0eo3yz.jpg" alt="分布式锁的示意图.jpg" style="zoom:70%;" />
 
 使用 Redis 实现分布式锁可以通过以下两种手段来实现：
 
 - 使用 incr + del 方式实现
 - 使用 setnx + del 方式实现
+- Redisson 实现
 
 #### 使用 incr + del 方式实现
 
@@ -194,7 +195,7 @@ public static boolean unLock(Jedis jedis, String lockKey, String flagId) {
 1. 把执行比较耗时的任务不要放到加锁的方法内，锁内的方法尽量控制执行时长
 2. 适当的把最大超时时间设置的长一点，正常情况下锁用完之后会被手动的删除掉
 
-接下来，我们使用 Java 语言来实现一个完整的分布式锁，代码如下：
+接下来使用 Java 语言来实现一个完整的分布式锁，代码如下：
 
 ```java
 public class DistributedLockExample {
