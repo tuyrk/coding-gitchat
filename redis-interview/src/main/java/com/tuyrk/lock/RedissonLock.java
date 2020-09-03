@@ -40,7 +40,7 @@ public class RedissonLock {
     public void main() throws Exception {
         lock("test", () -> {
             System.out.println("执行方法！");
-            TimeUnit.MINUTES.sleep(5);
+            TimeUnit.SECONDS.sleep(5);
             return null;
         });
     }
