@@ -1,7 +1,5 @@
 package com.lynn.demo;
 
-import com.lynn.demo.lock.AquiredLockWorker;
-import com.lynn.demo.lock.DistributedLocker;
 import com.lynn.demo.lock.RedisLocker;
 import com.lynn.demo.zk.DistributedLock;
 import org.springframework.beans.factory.annotation.Autowired;

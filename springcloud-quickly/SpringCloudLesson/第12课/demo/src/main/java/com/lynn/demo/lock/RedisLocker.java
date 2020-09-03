@@ -8,17 +8,19 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class RedisLocker {
+public class RedisLocker implements DistributedLocker{
 
     private final static String LOCKER_PREFIX = "lock:";
 
     @Autowired
     private RedissonConnector redissonConnector;
 
+    @Override
     public <T> T lock(String resourceName, AquiredLockWorker<T> worker) throws Exception {
         return lock(resourceName, worker, 100);
     }
 
+    @Override
     public <T> T lock(String resourceName, AquiredLockWorker<T> worker, int lockTime) throws Exception {
         RedissonClient redisson = redissonConnector.getClient();
         RLock lock = redisson.getLock(LOCKER_PREFIX + resourceName);

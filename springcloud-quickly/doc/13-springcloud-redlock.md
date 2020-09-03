@@ -150,7 +150,7 @@
 
 2. 增加以下几个类：
 
-   - 获取锁后需要处理的逻辑
+   获取锁后需要处理的逻辑
 
    ```java
    public interface AquiredLockWorker<T> {
@@ -158,7 +158,7 @@
    }
    ```
 
-   - 获取RedissonClient连接类
+   获取RedissonClient连接类
 
    ```java
    @Component
@@ -179,18 +179,16 @@
      private final static String LOCKER_PREFIX = "lock:";
      @Autowired
      private RedissonConnector redissonConnector;
-     
+   
      /**
       * 获取锁
       * @param resourceName  锁的名称
       * @param worker 获取锁后的处理类
       * @return 处理完具体的业务逻辑要返回的数据
       */
-     @Override
      public <T> T lock(String resourceName, AquiredLockWorker<T> worker) throws Exception {
        return lock(resourceName, worker, 100);
      }
-     @Override
      public <T> T lock(String resourceName, AquiredLockWorker<T> worker, int lockTime) throws Exception {
        RedissonClient redisson= redissonConnector.getClient();
        RLock lock = redisson.getLock(LOCKER_PREFIX + resourceName);
@@ -208,27 +206,24 @@
    }
    ```
 
-3. 修改 HelloController：
+3. 修改 HelloController
 
    ```java
-   @RestController
-   public class HelloController {
-     @Autowired
-     private RedisLocker redisLocker;
+   @Autowired
+   private RedisLocker redisLocker;
    
-     @RequestMapping("index")
-     public String index() throws Exception {
-       redisLocker.lock("test", () -> {
-         System.out.println("执行方法！");
-         Thread.sleep(5000);
-         return null;
-       });
-       return "hello world!";
-     }
+   @RequestMapping("index")
+   public String index() throws Exception {
+     redisLocker.lock("test", () -> {
+       System.out.println("执行方法！");
+       Thread.sleep(5000);
+       return null;
+     });
+     return "hello world!";
    }
    ```
-
-4. 按照上节的测试方法进行测试，我们发现分布式锁也生效了。
+   
+4. 按照上节的测试方法进行测试，我们发现分布式锁也生效了
 
 Redlock 是 Redis 官方推荐的一种方案，因此可靠性比较高。
 
@@ -284,11 +279,11 @@ Redlock 是 Redis 官方推荐的一种方案，因此可靠性比较高。
    }
    ```
 
-3. 我们可以认为获得排它锁的线程即可获得分布式锁，当获取到锁之后，可以执行方法的业务逻辑，执行完方法之后，再通过以下方法解锁：
+3. 获得排它锁的线程即可获得分布式锁，当获取到锁之后，可以执行方法的业务逻辑，执行完方法之后，再通过以下方法解锁：
 
    ```java
    public void unlock(){
-       connection.commit();
+     connection.commit();
    }
    ```
 
