@@ -12,11 +12,11 @@
 
 在 Redis 中布隆过滤器的用法如下：
 
-1. bf.add 添加元素；
-2. bf.exists 判断某个元素是否存在；
-3. bf.madd 添加多个元素；
-4. bf.mexists 判断多个元素是否存在；
-5. bf.reserve **设置布隆过滤器的准确率**。
+1. bf.add 添加元素
+2. bf.exists 判断某个元素是否存在
+3. bf.madd 添加多个元素
+4. bf.mexists 判断多个元素是否存在
+5. bf.reserve **设置布隆过滤器的准确率**
 
 使用示例如下：
 
@@ -115,7 +115,7 @@ Redis 布隆过滤器的实现，依靠的是它数据结构中的位数组，�
 
 位数组和 key 之间的关系。如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi490igi48j30oi0b3jrm.jpg" alt="位数组和 key 的关系" style="zoom:70%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi490igi48j30oi0b3jrm.jpg" alt="位数组和 key 的关系.jpg" style="zoom:70%;" />
 
 #### 3.在代码中实现布隆过滤器
 
