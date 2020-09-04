@@ -115,7 +115,7 @@ Redis 布隆过滤器的实现，依靠的是它数据结构中的位数组，�
 
 位数组和 key 之间的关系。如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi490igi48j30oi0b3jrm.jpg" alt="位数组和 key 的关系.jpg" style="zoom:70%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi490igi48j30oi0b3jrm.jpg" alt="位数组和 key 的关系.jpg" width="550" />
 
 #### 3.在代码中实现布隆过滤器
 
