@@ -1,5 +1,14 @@
 # Redis 内存用完会怎样？
 
+- [典型回答](#典型回答)
+- [考点分析](#考点分析)
+- [知识扩展](#知识扩展)
+  - [内存淘汰策略](#内存淘汰策略)
+  - [内存淘汰算法](#内存淘汰算法)
+    - [LRU](#lru)
+    - [LFU](#lfu)
+- [总结](#总结)
+
 在某些极端情况下，软件为了能正常运行会做一些保护性的措施，比如**运行内存超过最大值**的处理，以及**键值过期**的处理等。
 
 本文的面试题：Redis 内存用完之后会怎么？
@@ -20,7 +29,7 @@ Redis 内存用完指的是：Redis 的运行内存超过了 Redis 设置的最�
 
 当 Redis 的内存用完之后就会触发 Redis 的内存淘汰策略。执行流程如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv4bpuu0fj307t0g9wej.jpg" alt="触发内存淘汰策略.jpg" style="zoom:100%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv4bpuu0fj307t0g9wej.jpg" alt="触发内存淘汰策略.jpg" width="250" />
 
 最大内存的检测源码位于 server.c 中，核心代码如下：
 
@@ -100,46 +109,46 @@ Redis 内存淘汰在 4.0 版本之后一共有 8 种：
 
 内存淘汰策略决定了内存淘汰算法，从以上八种内存淘汰策略可以看出，它们中虽然具体的实现细节不同，但主要的淘汰算法有两种：LRU 算法和 LFU 算法。
 
-- LRU
+##### LRU
 
-  > LRU 全称是 Least Recently Used 译为最近最少使用，是一种常用的页面置换算法，选择最近最久未使用的页面予以淘汰
+> LRU 全称是 Least Recently Used 译为最近最少使用，是一种常用的页面置换算法，选择最近最久未使用的页面予以淘汰
 
-  ① LRU 算法实现
+① LRU 算法实现
 
-  LRU 算法需要基于链表结构，链表中的元素按照操作顺序从前往后排列，最新操作的键会被移动到表头，当需要内存淘汰时，只需要删除链表尾部的元素即可。
+LRU 算法需要基于链表结构，链表中的元素按照操作顺序从前往后排列，最新操作的键会被移动到表头，当需要内存淘汰时，只需要删除链表尾部的元素即可。
 
-  ② 近 LRU 算法
+② 近 LRU 算法
 
-  Redis 使用的是一种近似 LRU 算法，目的是为了更好的节约内存，它的实现方式是给现有的数据结构添加一个额外的字段，用于记录此键值的最后一次访问时间，Redis 内存淘汰时，会使用随机采样的方式来淘汰数据，它是随机取 5 个值 (此值可配置) ，然后淘汰最久没有使用的那个。
+Redis 使用的是一种近似 LRU 算法，目的是为了更好的节约内存，它的实现方式是给现有的数据结构添加一个额外的字段，用于记录此键值的最后一次访问时间，Redis 内存淘汰时，会使用随机采样的方式来淘汰数据，它是随机取 5 个值 (此值可配置) ，然后淘汰最久没有使用的那个。
 
-  ③ LRU 算法缺点
+③ LRU 算法缺点
 
-  LRU 算法有一个缺点：很久没有使用的一个键值，如果最近被访问了一次，那么它就不会被淘汰，即使它是使用次数最少的缓存，那它也不会被淘汰，因此在 Redis 4.0 之后引入了 LFU 算法。
+LRU 算法有一个缺点：很久没有使用的一个键值，如果最近被访问了一次，那么它就不会被淘汰，即使它是使用次数最少的缓存，那它也不会被淘汰，因此在 Redis 4.0 之后引入了 LFU 算法。
 
-- LFU
+##### LFU
 
-  > LFU 全称是 Least Frequently Used 译为最不常用的，最不常用的算法是**根据总访问次数来淘汰数据**的，它的核心思想是：如果数据过去被访问多次，那么将来被访问的频率也更高
+> LFU 全称是 Least Frequently Used 译为最不常用的，最不常用的算法是**根据总访问次数来淘汰数据**的，它的核心思想是：如果数据过去被访问多次，那么将来被访问的频率也更高
 
-  LFU 解决了偶尔访问一次的数据就不会被淘汰的问题，相比于 LRU 算法也更合理一些。 
+LFU 解决了偶尔访问一次的数据就不会被淘汰的问题，相比于 LRU 算法也更合理一些。 
 
-  在 Redis 中每个对象头中记录着 LFU 的信息，源码如下：
+在 Redis 中每个对象头中记录着 LFU 的信息，源码如下：
 
-  ```c++
-  typedef struct redisObject {
-    unsigned type:4;
-    unsigned encoding:4;
-    unsigned lru:LRU_BITS; /* LRU time (relative to global lru_clock) or
-                              LFU data (least significant 8 bits frequency
-                              and most significant 16 bits access time). */
-    int refcount;
-    void *ptr;
-  } robj;
-  ```
+```c++
+typedef struct redisObject {
+  unsigned type:4;
+  unsigned encoding:4;
+  unsigned lru:LRU_BITS; /* LRU time (relative to global lru_clock) or
+                            LFU data (least significant 8 bits frequency
+                            and most significant 16 bits access time). */
+  int refcount;
+  void *ptr;
+} robj;
+```
 
-  在 Redis 中 LFU 存储分为两部分，8 bit 的 logc(logistic counter)和16 bit 的 ldt(last decrement time) 。
+在 Redis 中 LFU 存储分为两部分，8 bit 的 logc(logistic counter)和16 bit 的 ldt(last decrement time) 。
 
-  1. logc 是用来存储访问频次, 8 bit 能表示的最大整数值为 255，它的值越小表示使用频率越低，越容易淘汰
-  2. ldt 是用来存储上一次 logc 的更新时间
+1. logc 是用来存储访问频次, 8 bit 能表示的最大整数值为 255，它的值越小表示使用频率越低，越容易淘汰
+2. ldt 是用来存储上一次 logc 的更新时间
 
 至于 Redis 到底采用的是近 LRU 算法还是 LFU 算法，完全取决于内存淘汰策略的类型配置。
 
