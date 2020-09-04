@@ -120,7 +120,7 @@ RDB 和 AOF 持久化各有利弊：RDB 可能会导致一定时间内的数据�
 
 混合持久化的数据存储结构如下图所示：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t19ypkdj30dk0fct8s.jpg" alt="混合持久化的数据存储结构.jpg" style="zoom:50%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t19ypkdj30dk0fct8s.jpg" alt="混合持久化的数据存储结构.jpg" width="200" />
 
 查询混合持久化是否开启，执行结果如下所示：
 
@@ -147,11 +147,11 @@ RDB 和 AOF 持久化各有利弊：RDB 可能会导致一定时间内的数据�
 
 正常情况系统的执行流程，如下图所示：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t18gieij30hx03pt8m.jpg" alt="正常访问.jpg" style="zoom:80%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t18gieij30hx03pt8m.jpg" alt="正常访问.jpg" width="490" />
 
 缓存雪崩的执行流程，如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t16adk9j30e506y3yi.jpg" alt="缓存雪崩.jpg" style="zoom:80%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t16adk9j30e506y3yi.jpg" alt="缓存雪崩.jpg" width="390" />
 
 以上对比图可以看出缓存雪崩对系统造成的影响，那如何解决缓存雪崩的问题？ 缓存雪崩的**常用解决方案**有以下几个：
 
@@ -193,13 +193,13 @@ RDB 和 AOF 持久化各有利弊：RDB 可能会导致一定时间内的数据�
 
    二级缓存指的是除了 Redis 本身的缓存，再设置一层缓存，当 Redis 失效之后，先去查询二级缓存。 例如可以设置一个本地缓存，在 Redis 缓存失效的时候先去查询本地缓存而非查询数据库。 加入二级缓存之后程序执行流程，如下图所示：
 
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t17j6ssj30ma0ffmxm.jpg" alt="二级缓存.jpg" style="zoom:50%;" />
+   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t17j6ssj30ma0ffmxm.jpg" alt="二级缓存.jpg" width="400" />
 
 ### 缓存穿透
 
 缓存穿透是指查询缓存和数据库都无数据，因为数据库查询无数据，出于容错考虑，不会将结果保存到缓存中，因此每次请求都会去查询数据库。 缓存穿透执行流程如下图所示：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t17ymsxj307p0eq0sl.jpg" alt="缓存穿透.jpg" style="zoom:80%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t17ymsxj307p0eq0sl.jpg" alt="缓存穿透.jpg" width="220" />
 
 其中红色路径表示缓存穿透的执行路径，可以看出缓存穿透会给数据库造成很大的压力。 缓存穿透的解决方案有以下几个：
 
@@ -215,7 +215,7 @@ RDB 和 AOF 持久化各有利弊：RDB 可能会导致一定时间内的数据�
 
 缓存击穿指的是某个热点缓存，在某一时刻恰好失效了，然后此时刚好有大量的并发请求，此时这些请求将会给数据库造成巨大的压力。 缓存击穿的执行流程如下图所示：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t13tlqhj30jj09qdg0.jpg" alt="缓存击穿.jpg" style="zoom:60%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t13tlqhj30jj09qdg0.jpg" alt="缓存击穿.jpg" width="380" />
 
 缓存击穿的解决方案有以下 2 个：
 
@@ -231,7 +231,7 @@ RDB 和 AOF 持久化各有利弊：RDB 可能会导致一定时间内的数据�
 
 首先缓存预热并不是一个问题，而是使用缓存时的一个优化方案，它可以提高前台用户的使用体验。 **缓存预热指的是在系统启动的时候，先把查询结果预存到缓存中，以便用户后面查询时可以直接从缓存中读取，以节约用户的等待时间**。缓存预热的执行流程如下图所示：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t1acxjuj30rc0dfq3d.jpg" alt="缓存预热.jpg" style="zoom:60%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t1acxjuj30rc0dfq3d.jpg" alt="缓存预热.jpg" width="520" />
 
 缓存预热的实现思路有以下三种：
 
