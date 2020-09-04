@@ -20,11 +20,11 @@ RDB（Redis DataBase）是将某一个时刻的内存快照以二进制的方式
 
 1. save 执行流程。如下图所示：
 
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t15o088j30c80fqaa4.jpg" alt="save 执行流程.jpg" style="zoom:50%;" />
+   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t15o088j30c80fqaa4.jpg" alt="save 执行流程.jpg" width="190" />
 
 2. bgsave 执行流程。如下图所示：
 
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t18uvmxj30fm0nkq39.jpg" alt="bgsave 执行流程.jpg" style="zoom:50%;" />
+   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi9t18uvmxj30fm0nkq39.jpg" alt="bgsave 执行流程.jpg" width="250" />
 
 ##### 自动持久化
 
@@ -33,12 +33,12 @@ RDB（Redis DataBase）是将某一个时刻的内存快照以二进制的方式
    `save m n` 是指在 m 秒内，如果有 n 个键发生改变，则自动触发持久化。 参数 m 和 n 可以在 Redis 的配置文件中找到，例如，`save 60 1` 则表明在 60 秒内，至少有一个键发生改变，就会触发 RDB 持久化。 自动触发持久化的本质是 Redis 通过判断，如果满足设置的触发条件，就会自动执行一次 `bgsave` 命令。 
 
    > 注意：当设置多个 save m n 命令时，满足任意一个条件都会触发持久化。 例如，设置以下两个 save m n 命令：
-   
+
    ```shell
    save 60 10
-save 600 1
+   save 600 1
    ```
-   
+
    当 60s 内如果有 10 次 Redis 键值发生改变，就会触发持久化；如果 60s 内 Redis 的键值改变次数少于 10 次，那么 Redis 就会判断 600s 内 Redis 的键值是否至少被修改了一次，如果满足则会触发持久化。
    
 2. flushall
