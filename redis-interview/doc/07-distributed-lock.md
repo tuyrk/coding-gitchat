@@ -10,7 +10,7 @@ Redis 作为一个独立的三方系统（通常被作为缓存中间件使用�
 
 分布式锁的示意图，如下所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi128lc3hsj30og0eo3yz.jpg" alt="分布式锁的示意图.jpg" style="zoom:70%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi128lc3hsj30og0eo3yz.jpg" alt="分布式锁的示意图.jpg" width="450" />
 
 使用 Redis 实现分布式锁可以通过以下两种手段来实现：
 
@@ -90,7 +90,7 @@ OK
 
 死锁是并发编程中比较常见的问题，以单机锁的死锁来说，当两个线程都持有了自己锁资源并试图获取对方锁资源时就会造成死锁的诞生，如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi128jgk05j30it0e53yr.jpg" alt="单机锁的死锁" style="zoom:60%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi128jgk05j30it0e53yr.jpg" alt="单机锁的死锁" width="400" />
 
 为了更好的帮助大家理解死锁的概念，这里提供了一个 Java 版本单机锁死锁的实现示例。如下所示：
 
@@ -156,11 +156,11 @@ OK # 创建锁成功
 
 此执行流程如下图所示：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi128kkctij30ai07l0sm.jpg" alt="分布式锁-执行超时同时拥有锁" style="zoom:100%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi128kkctij30ai07l0sm.jpg" alt="分布式锁-执行超时同时拥有锁" width="350" />
 
 **执行超时**问题除带来**线程安全**问题外，还引发了另一个问题：**锁被误删**。 假设锁的最大超时时间是 30s，应用 1 需要执行 35s，然而在 30s时，锁被自动释放后，应用 2 重新获取并设置了锁，然后在 35s 时，应用 1 执行完成后，就会把应用 2 创建的锁给删除掉。如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi128jzzn8j30b40gljrd.jpg" alt="分布式锁-锁被误删" style="zoom:80%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi128jzzn8j30b40gljrd.jpg" alt="分布式锁-锁被误删" width="350" />
 
 **锁被误删的解决方案**是在使用 `set` 命令创建锁时，给 value 值设置一个归属人标识，例如给应用关联一个 UUID，每次在删除之前先要判断 UUID 是不是属于当前的线程，如果属于则删除，这就避免了锁被误删的问题。 注意：如果是在代码中执行删除，不能使用先判断再删除的方法，伪代码如下：
 
