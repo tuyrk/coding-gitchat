@@ -65,12 +65,7 @@ Redis 优化的手段有很多，老子教育我们“天下难事必作于易�
 
 通常情况下 Redis 是单行执行的，客户端先向服务器发送请求，服务端接收并处理请求后再把结果返回给客户端，这种处理模式在非频繁请求时不会有任何问题。但如果出现集中大批量的请求时，因为**每个请求都要经历先请求再响应的过程，这就会造成网络资源浪费**，**管道技术可以把所有命令整合一次性发给服务端，服务端再一次性响应给客户端**，这样就能大大的提升 Redis 的响应速度。
 
-普通命令模式，如下图所示：
-
 <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi57igaoc7j30bw0cn0sv.jpg" alt="普通模式.jpg" width="250" />
-
-管道模式，如下图所示：
-
 <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi57idkgvhj30b00cfq30.jpg" alt="管道模式.jpg" width="250" />
 
 > 小贴士：管道中命令越多，管道技术的作用就越大，相比于普通模式来说执行效率就越高。
@@ -158,7 +153,7 @@ slave-lazy-flush no
 
 Redis 过期键值删除使用的是贪心策略，它每秒会进行 10 次过期扫描，此配置可在 redis.conf 进行配置，默认值是 `hz 10`。Redis 会随机抽取 20 个值，删除这 20 个键中过期的键，如果过期 key 的比例超过 25% ，重复执行此流程。如下图所示：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi57id57qlj30eg0pm74o.jpg" alt="image.png" width="280" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi57id57qlj30eg0pm74o.jpg" alt="Redis过期键值删除-贪心策略.jpg" width="280" />
 
 如果在大型系统中有大量缓存在同一时间同时过期，那么会导致 Redis 循环多次持续扫描删除过期字典，直到过期字典中过期键值被删除的比较稀疏为止，而在整个执行过程会导致 Redis 的读写出现明显的卡顿，卡顿的另一种原因是内存管理器需要频繁回收内存页，因此也会消耗一定的 CPU。
 
