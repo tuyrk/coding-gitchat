@@ -20,7 +20,7 @@ Redis 最常见的业务场景就是**缓存读取与存储**，而随着时间�
 
 它们的执行流程如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi17jwgl55j30so08wt8l.jpg" alt="消息队列.jpg" style="zoom:60%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi17jwgl55j30so08wt8l.jpg" alt="消息队列.jpg" width="550" />
 
 使用消息队列有如下好处：
 
@@ -45,7 +45,7 @@ Redis 想要保住消息队列中的数据不丢失，必须要做到以下两�
 
 消息队列本身的概念并不难懂，这好像买货和卖货一样，最早是卖家和买家是直接面对面进行交易，但这种方式有很多的局限，比如很难规模化，需要很大的人力成本等。随着科技的发展，可以创建更多的无人超市，而这些无人超市就相当于消息队列中的 channel，卖家相当于生产者，每次只需要负责把货物存放到无人超市就行了，而买家也不用再找卖家直接买货了，只需每次去无人超市取货就可以了。这样就可以开越来越多的无人超市，即使搞双 11、618 等活动也不怕了，因为那时候就有足够多的无人超市了，这个例子其实就可以用来很好的理解消息队列的核心思路和工作原理。他们之间的关系如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi17jwuc5mj30si08m0sm.jpg" alt="消息队列" style="zoom:60%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi17jwuc5mj30si08m0sm.jpg" alt="消息队列" width="550" />
 
 理解了消息队列的概念之后，重点应该关注的就是消息队列的实现方式了。
 
@@ -150,7 +150,7 @@ producer(); // 生产者发送消息
 
 此模式提供了主题订阅的模式，例如要订阅日志类的消息队列，它们的命名都是 logXXX，这就需要使用 Redis 提供的另一个功能 `Pattern Subscribe` 主题订阅，这种方式可以使用 “*” 来匹配多个频道，如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi17jxay29j30te0emaa4.jpg" alt="发布订阅模式" style="zoom:60%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi17jxay29j30te0emaa4.jpg" alt="发布订阅模式" width="550" />
 
 > 主题订阅模式的生产者的代码是一样，只有消费者的代码是不同的。实现代码如下：
 
