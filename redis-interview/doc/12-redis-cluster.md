@@ -88,7 +88,7 @@ Redis 多机知识是应聘中级和高级必问的知识点，它虽然看起�
 
 使用主从同步的一个致命问题就是出现服务器宕机之后需要手动恢复，而使用哨兵模式可以监控主从服务器并且提供**自动容灾恢复的功能**。哨兵模式构建流程如下图所示：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi5j153t01j30b80c1q2w.jpg" alt="哨兵模式构建流程.jpg" style="zoom:80%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi5j153t01j30b80c1q2w.jpg" alt="哨兵模式构建流程.jpg" width="320" />
 
 > 小贴士：Redis Sentinel 的最小分配单位是一主一从
 
@@ -121,7 +121,7 @@ Sentinel 只需配置监听主节点的信息，它会自动监听对应的从�
 
 启动第二个 Sentinel 比单机模式多了最后一行发现其他 Sentinel 服务器的命令，说明这两个 Sentinel 已经组成一个集群了。 Sentinel 集群示意图如下：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi5j17w48xj30b50cxdft.jpg" alt="哨兵模式-多哨兵" style="zoom:80%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi5j17w48xj30b50cxdft.jpg" alt="哨兵模式-多哨兵" width="320" />
 
 一般情况下 Sentinel 集群的数量取大于 1 的奇数，例如 3、5、7、9，而 quorum 的配置要根据 Sentinel 的数量来发生变化，例如 Sentinel 是 3 台，那么对应的 quorum 最好是 2，如果 Sentinel 是 5 台，那么 quorum 最好是 3，它表示当有 3 台 Sentinel 都确认主节点下线了，就可以确定主节点真的下线了。
 
@@ -153,7 +153,7 @@ Redis Cluster 是无代理模式去中心化的运行模式，客户端发送的
 
 Redis Cluster 架构图如下所示：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi5j193oyvj30uk0fkaa7.jpg" alt="Redis Cluster 架构图" style="zoom:50%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gi5j193oyvj30uk0fkaa7.jpg" alt="Redis Cluster 架构图" width="490" />
 
 Redis Cluster 的搭建方式有两种：
 
