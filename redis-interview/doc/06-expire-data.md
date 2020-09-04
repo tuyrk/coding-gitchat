@@ -1,5 +1,15 @@
 # Redis 如何处理已经过期的数据？
 
+- [典型回答](#典型回答)
+- [考点分析](#考点分析)
+- [知识扩展](#知识扩展)
+  - [删除策略](#删除策略)
+    - [1.定时删除](#1定时删除)
+    - [2.惰性删除](#2惰性删除)
+    - [3.定期删除](#3定期删除)
+  - [过期键](#过期键)
+- [总结](#总结)
+
 上一篇讲了 Redis 内存用完之后的内存淘汰策略，它主要是用来处理异常情况下的数据清理。而本文讲的是 Redis 的键值过期之后的数据处理，讲的是正常情况下的数据清理，但面试者常常会把两个概念搞混。
 
 本文的面试题是：Redis 如何处理已过期的数据？
@@ -43,175 +53,175 @@ OK
 
 常见的过期策略，有以下三种：**定时删除**、**惰性删除**、**定期删除**
 
-1. 定时删除
+##### 1.定时删除
 
-   在设置键值过期时间时，创建一个定时事件，当过期时间到达时，由事件处理器自动执行键的删除操作
+在设置键值过期时间时，创建一个定时事件，当过期时间到达时，由事件处理器自动执行键的删除操作
 
-   优点：保证内存可以被尽快的释放
+优点：保证内存可以被尽快的释放
 
-   缺点：在 Redis 高负载的情况下或有大量过期键需要同时处理时，会造成 Redis 服务器卡顿，影响主业务执行
+缺点：在 Redis 高负载的情况下或有大量过期键需要同时处理时，会造成 Redis 服务器卡顿，影响主业务执行
 
-2. 惰性删除
+##### 2.惰性删除
 
-   不主动删除过期键，每次从数据库获取键值时判断是否过期，如果过期则删除键值，并返回 null。
+不主动删除过期键，每次从数据库获取键值时判断是否过期，如果过期则删除键值，并返回 null。
 
-   优点：因为每次访问时，才会判断过期键，所以此策略只会使用很少的系统资源
+优点：因为每次访问时，才会判断过期键，所以此策略只会使用很少的系统资源
 
-   缺点：系统占用空间删除不及时，导致空间利用率降低，造成了一定的空间浪费
+缺点：系统占用空间删除不及时，导致空间利用率降低，造成了一定的空间浪费
 
-   **源码解析**
+**源码解析**
 
-   > Redis 中惰性删除的源码位于 src/db.c 文件的 expireIfNeeded 方法中，源码如下：
+> Redis 中惰性删除的源码位于 src/db.c 文件的 expireIfNeeded 方法中，源码如下：
 
-   ```c++
-   int expireIfNeeded(redisDb *db, robj *key) {
-     // 判断键是否过期
-     if (!keyIsExpired(db,key)) return 0;
-     if (server.masterhost != NULL) return 1;
-     /* 删除过期键 */
-     // 增加过期键个数
-     server.stat_expiredkeys++;
-     // 传播键过期的消息
-     propagateExpire(db,key,server.lazyfree_lazy_expire);
-     notifyKeyspaceEvent(NOTIFY_EXPIRED,
-                         "expired",key,db->id);
-     // server.lazyfree_lazy_expire 为 1 表示异步删除（懒空间释放），反之同步删除
-     return server.lazyfree_lazy_expire ? dbAsyncDelete(db,key) :
-     dbSyncDelete(db,key);
-   }
-   // 判断键是否过期
-   int keyIsExpired(redisDb *db, robj *key) {
-     mstime_t when = getExpire(db,key);
-     if (when < 0) return 0; /* No expire for this key */
-     /* Don't expire anything while loading. It will be done later. */
-     if (server.loading) return 0;
-     mstime_t now = server.lua_caller ? server.lua_time_start : mstime();
-     return now > when;
-   }
-   // 获取键的过期时间
-   long long getExpire(redisDb *db, robj *key) {
-     dictEntry *de;
-     /* No expire? return ASAP */
-     if (dictSize(db->expires) == 0 ||
-         (de = dictFind(db->expires,key->ptr)) == NULL) return -1;
-     /* The entry was found in the expire dict, this means it should also
-        * be present in the main dict (safety check). */
-     serverAssertWithInfo(NULL,key,dictFind(db->dict,key->ptr) != NULL);
-     return dictGetSignedIntegerVal(de);
-   }
-   ```
+```c++
+int expireIfNeeded(redisDb *db, robj *key) {
+  // 判断键是否过期
+  if (!keyIsExpired(db,key)) return 0;
+  if (server.masterhost != NULL) return 1;
+  /* 删除过期键 */
+  // 增加过期键个数
+  server.stat_expiredkeys++;
+  // 传播键过期的消息
+  propagateExpire(db,key,server.lazyfree_lazy_expire);
+  notifyKeyspaceEvent(NOTIFY_EXPIRED,
+                      "expired",key,db->id);
+  // server.lazyfree_lazy_expire 为 1 表示异步删除（懒空间释放），反之同步删除
+  return server.lazyfree_lazy_expire ? dbAsyncDelete(db,key) :
+  dbSyncDelete(db,key);
+}
+// 判断键是否过期
+int keyIsExpired(redisDb *db, robj *key) {
+  mstime_t when = getExpire(db,key);
+  if (when < 0) return 0; /* No expire for this key */
+  /* Don't expire anything while loading. It will be done later. */
+  if (server.loading) return 0;
+  mstime_t now = server.lua_caller ? server.lua_time_start : mstime();
+  return now > when;
+}
+// 获取键的过期时间
+long long getExpire(redisDb *db, robj *key) {
+  dictEntry *de;
+  /* No expire? return ASAP */
+  if (dictSize(db->expires) == 0 ||
+      (de = dictFind(db->expires,key->ptr)) == NULL) return -1;
+  /* The entry was found in the expire dict, this means it should also
+     * be present in the main dict (safety check). */
+  serverAssertWithInfo(NULL,key,dictFind(db->dict,key->ptr) != NULL);
+  return dictGetSignedIntegerVal(de);
+}
+```
 
-   所有对数据库的读写命令在执行之前，都会调用 expireIfNeeded 方法判断键值是否过期，过期则会从数据库中删除，反之则不做任何处理。
+所有对数据库的读写命令在执行之前，都会调用 expireIfNeeded 方法判断键值是否过期，过期则会从数据库中删除，反之则不做任何处理。
 
-   惰性删除执行流程，如下图所示： 
+惰性删除执行流程，如下图所示： 
 
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48o6kpyj30au09t0sp.jpg" alt="过期删除策略-惰性删除执行流程" width="380" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48o6kpyj30au09t0sp.jpg" alt="过期删除策略-惰性删除执行流程" width="380" />
 
-3. 定期删除
+##### 3.定期删除
 
-   每隔一段时间检查一次数据库，随机删除一些过期键。 Redis 默认每秒进行 10 次过期扫描，此配置可通过 Redis 的配置文件 redis.conf 进行配置，配置键为 `hz` 它的默认值是 `hz 10` 。 需要注意的是：Redis 每次扫描并不是遍历过期字典中的所有键，而是采用**随机抽取判断并删除过期键**的形式执行的。
+每隔一段时间检查一次数据库，随机删除一些过期键。 Redis 默认每秒进行 10 次过期扫描，此配置可通过 Redis 的配置文件 redis.conf 进行配置，配置键为 `hz` 它的默认值是 `hz 10` 。 需要注意的是：Redis 每次扫描并不是遍历过期字典中的所有键，而是采用**随机抽取判断并删除过期键**的形式执行的。
 
-   优点：通过限制删除操作的时长和频率，来减少删除操作对 Redis 主业务的影响，同时也能删除一部分过期的数据，减少了过期键对空间的无效占用。
+优点：通过限制删除操作的时长和频率，来减少删除操作对 Redis 主业务的影响，同时也能删除一部分过期的数据，减少了过期键对空间的无效占用。
 
-   缺点：内存清理方面没有定时删除效果好，同时系统资源占用没有惰性删除少。
+缺点：内存清理方面没有定时删除效果好，同时系统资源占用没有惰性删除少。
 
-   **定期删除流程**
+**定期删除流程**
 
-   1. 从过期字典中随机取出 20 个键
-   2. 删除这 20 个键中过期的键
-   3. 如果过期 key 的比例超过 25% ，重复步骤 1
+1. 从过期字典中随机取出 20 个键
+2. 删除这 20 个键中过期的键
+3. 如果过期 key 的比例超过 25% ，重复步骤 1
 
-   同时为了保证定期扫描不会出现循环过度，导致线程卡死现象，算法还增加了**扫描的时间上限**，默认不会超过 25ms。
+同时为了保证定期扫描不会出现循环过度，导致线程卡死现象，算法还增加了**扫描的时间上限**，默认不会超过 25ms。
 
-   定期删除的执行流程，如下图所示： 
+定期删除的执行流程，如下图所示： 
 
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48oipbwj306u0dwq2w.jpg" alt="过期删除策略-定期删除执行流程.jpg" width="240" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48oipbwj306u0dwq2w.jpg" alt="过期删除策略-定期删除执行流程.jpg" width="240" />
 
-   **源码解析**
+**源码解析**
 
-   Redis 定期删除的核心源码在 src/expire.c 文件下的 activeExpireCycle 方法中，源码如下：
+Redis 定期删除的核心源码在 src/expire.c 文件下的 activeExpireCycle 方法中，源码如下：
 
-   ```c++
-   void activeExpireCycle(int type) {
-     static unsigned int current_db = 0; /* 上次定期删除遍历到的数据库 ID */
-     static int timelimit_exit = 0;      /* Time limit hit in previous call? */
-     static long long last_fast_cycle = 0; /* 上一次执行快速定期删除的时间点 */
-     int j, iteration = 0;
-     int dbs_per_call = CRON_DBS_PER_CALL; // 每次定期删除，遍历的数据库的数量
-     long long start = ustime(), timelimit, elapsed;
-     if (clientsArePaused()) return;
-     if (type == ACTIVE_EXPIRE_CYCLE_FAST) {
-       if (!timelimit_exit) return;
-       // ACTIVE_EXPIRE_CYCLE_FAST_DURATION 是快速定期删除的执行时长
-       if (start < last_fast_cycle + ACTIVE_EXPIRE_CYCLE_FAST_DURATION*2) return;
-       last_fast_cycle = start;
-     }
-     if (dbs_per_call > server.dbnum || timelimit_exit)
-       dbs_per_call = server.dbnum;
-     // 慢速定期删除的执行时长
-     timelimit = 1000000*ACTIVE_EXPIRE_CYCLE_SLOW_TIME_PERC/server.hz/100;
-     timelimit_exit = 0;
-     if (timelimit <= 0) timelimit = 1;
-     if (type == ACTIVE_EXPIRE_CYCLE_FAST)
-       timelimit = ACTIVE_EXPIRE_CYCLE_FAST_DURATION; /* 删除操作的执行时长 */
-     long total_sampled = 0;
-     long total_expired = 0;
-     for (j = 0; j < dbs_per_call && timelimit_exit == 0; j++) {
-       int expired;
-       redisDb *db = server.db+(current_db % server.dbnum);
-       current_db++;
-       do {
-         // .......
-         expired = 0;
-         ttl_sum = 0;
-         ttl_samples = 0;
-         // 每个数据库中检查的键的数量
-         if (num > ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP)
-           num = ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP;
-         // 从数据库中随机选取 num 个键进行检查
-         while (num--) {
-           dictEntry *de;
-           long long ttl;
-           if ((de = dictGetRandomKey(db->expires)) == NULL) break;
-           ttl = dictGetSignedInteger
-             // 过期检查，并对过期键进行删除
-             if (activeExpireCycleTryExpire(db,de,now)) expired++;
-           if (ttl > 0) {
-             /* We want the average TTL of keys yet not expired. */
-             ttl_sum += ttl;
-             ttl_samples++;
-           }
-           total_sampled++;
-         }
-         total_expired += expired;
-         if (ttl_samples) {
-           long long avg_ttl = ttl_sum/ttl_samples;
-           if (db->avg_ttl == 0) db->avg_ttl = avg_ttl;
-           db->avg_ttl = (db->avg_ttl/50)*49 + (avg_ttl/50);
-         }
-         if ((iteration & 0xf) == 0) { /* check once every 16 iterations. */
-           elapsed = ustime()-start;
-           if (elapsed > timelimit) {
-             timelimit_exit = 1;
-             server.stat_expired_time_cap_reached_count++;
-             break;
-           }
-         }
-         /* 每次检查只删除 ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP/4 个过期键 */
-       } while (expired > ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP/4);
-     }
-     // .......
-   }
-   ```
+```c++
+void activeExpireCycle(int type) {
+  static unsigned int current_db = 0; /* 上次定期删除遍历到的数据库 ID */
+  static int timelimit_exit = 0;      /* Time limit hit in previous call? */
+  static long long last_fast_cycle = 0; /* 上一次执行快速定期删除的时间点 */
+  int j, iteration = 0;
+  int dbs_per_call = CRON_DBS_PER_CALL; // 每次定期删除，遍历的数据库的数量
+  long long start = ustime(), timelimit, elapsed;
+  if (clientsArePaused()) return;
+  if (type == ACTIVE_EXPIRE_CYCLE_FAST) {
+    if (!timelimit_exit) return;
+    // ACTIVE_EXPIRE_CYCLE_FAST_DURATION 是快速定期删除的执行时长
+    if (start < last_fast_cycle + ACTIVE_EXPIRE_CYCLE_FAST_DURATION*2) return;
+    last_fast_cycle = start;
+  }
+  if (dbs_per_call > server.dbnum || timelimit_exit)
+    dbs_per_call = server.dbnum;
+  // 慢速定期删除的执行时长
+  timelimit = 1000000*ACTIVE_EXPIRE_CYCLE_SLOW_TIME_PERC/server.hz/100;
+  timelimit_exit = 0;
+  if (timelimit <= 0) timelimit = 1;
+  if (type == ACTIVE_EXPIRE_CYCLE_FAST)
+    timelimit = ACTIVE_EXPIRE_CYCLE_FAST_DURATION; /* 删除操作的执行时长 */
+  long total_sampled = 0;
+  long total_expired = 0;
+  for (j = 0; j < dbs_per_call && timelimit_exit == 0; j++) {
+    int expired;
+    redisDb *db = server.db+(current_db % server.dbnum);
+    current_db++;
+    do {
+      // .......
+      expired = 0;
+      ttl_sum = 0;
+      ttl_samples = 0;
+      // 每个数据库中检查的键的数量
+      if (num > ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP)
+        num = ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP;
+      // 从数据库中随机选取 num 个键进行检查
+      while (num--) {
+        dictEntry *de;
+        long long ttl;
+        if ((de = dictGetRandomKey(db->expires)) == NULL) break;
+        ttl = dictGetSignedInteger
+          // 过期检查，并对过期键进行删除
+          if (activeExpireCycleTryExpire(db,de,now)) expired++;
+        if (ttl > 0) {
+          /* We want the average TTL of keys yet not expired. */
+          ttl_sum += ttl;
+          ttl_samples++;
+        }
+        total_sampled++;
+      }
+      total_expired += expired;
+      if (ttl_samples) {
+        long long avg_ttl = ttl_sum/ttl_samples;
+        if (db->avg_ttl == 0) db->avg_ttl = avg_ttl;
+        db->avg_ttl = (db->avg_ttl/50)*49 + (avg_ttl/50);
+      }
+      if ((iteration & 0xf) == 0) { /* check once every 16 iterations. */
+        elapsed = ustime()-start;
+        if (elapsed > timelimit) {
+          timelimit_exit = 1;
+          server.stat_expired_time_cap_reached_count++;
+          break;
+        }
+      }
+      /* 每次检查只删除 ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP/4 个过期键 */
+    } while (expired > ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP/4);
+  }
+  // .......
+}
+```
 
-   activeExpireCycle 方法在规定的时间，分多次遍历各个数据库，从过期字典中随机检查一部分键值的过期时间，删除其中的过期键。
+activeExpireCycle 方法在规定的时间，分多次遍历各个数据库，从过期字典中随机检查一部分键值的过期时间，删除其中的过期键。
 
-   这个函数有两种执行模式：快速模式、慢速模式。体现是代码中的 timelimit 变量，这个变量是用来约束此函数的运行时间的。
+这个函数有两种执行模式：快速模式、慢速模式。体现是代码中的 timelimit 变量，这个变量是用来约束此函数的运行时间的。
 
-   - 快速模式下 timelimit 的值是固定的，等于预定义常量 ACTIVE_EXPIRE_CYCLE_FAST_DURATION
-   - 慢速模式下 timelimit 的值是通过 1000000*ACTIVE_EXPIRE_CYCLE_SLOW_TIME_PERC/server.hz/100 计算的
-   
-   如果只使用惰性删除会导致删除数据不及时造成一定的空间浪费，又因为 Redis 本身的主线程是单线程执行的，如果因为删除操作而影响主业务的执行就得不偿失了，为此 Redis 需要制定多个过期删除策略：**惰性删除+定期删除**的过期策略，来保证 Redis 能够及时并高效的删除 Redis 中的过期键。
+- 快速模式下 timelimit 的值是固定的，等于预定义常量 ACTIVE_EXPIRE_CYCLE_FAST_DURATION
+- 慢速模式下 timelimit 的值是通过 1000000*ACTIVE_EXPIRE_CYCLE_SLOW_TIME_PERC/server.hz/100 计算的
+
+如果只使用惰性删除会导致删除数据不及时造成一定的空间浪费，又因为 Redis 本身的主线程是单线程执行的，如果因为删除操作而影响主业务的执行就得不偿失了，为此 Redis 需要制定多个过期删除策略：**惰性删除+定期删除**的过期策略，来保证 Redis 能够及时并高效的删除 Redis 中的过期键。
 
 #### 过期键
 
