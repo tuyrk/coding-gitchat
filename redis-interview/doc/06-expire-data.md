@@ -26,7 +26,7 @@ OK
 
 获取键值的执行流程是：当有键值的访问请求时 Redis 会先判断此键值是否在过期字典中，如果没有表示键值没有设置过期时间（永不过期），然后就可以正常返回键值数据了；如果此键值在过期字典中则会判断当前时间是否小于过期时间，如果小于则说明此键值没有过期可以正常返回数据，反之则表示数据已过期，会删除此键值并且返回给客户端 `nil`。执行流程如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48pgb9gj30qo0gmt93.jpg" alt="Redis获取键值的执行流程.jpg" style="zoom:50%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48pgb9gj30qo0gmt93.jpg" alt="Redis获取键值的执行流程.jpg" width="500" />
 
 这是获取键值数据的方法流程，同时也是过期键值的判断和删除的流程。
 
@@ -105,7 +105,7 @@ OK
 
    惰性删除执行流程，如下图所示： 
 
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48o6kpyj30au09t0sp.jpg" alt="过期删除策略-惰性删除执行流程" style="zoom:90%;" />
+   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48o6kpyj30au09t0sp.jpg" alt="过期删除策略-惰性删除执行流程" width="380" />
 
 3. 定期删除
 
@@ -125,7 +125,7 @@ OK
 
    定期删除的执行流程，如下图所示： 
 
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48oipbwj306u0dwq2w.jpg" alt="过期删除策略-定期删除执行流程.jpg" style="zoom:90%;" />
+   <img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48oipbwj306u0dwq2w.jpg" alt="过期删除策略-定期删除执行流程.jpg" width="240" />
 
    **源码解析**
 
@@ -233,7 +233,7 @@ typedef struct redisDb {
 
 过期键的数据结构如下图所示： 
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48oxmz8j30g30b70sl.jpg" alt="过期键数据结构.jpg" style="zoom:80%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghv48oxmz8j30g30b70sl.jpg" alt="过期键数据结构.jpg" width="450" />
 
 ### 总结
 
